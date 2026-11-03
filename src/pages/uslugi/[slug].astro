@@ -1,0 +1,2120 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Clients from '../../components/Clients.astro';
+import ServiceHeroVisual from '../../components/ServiceHeroVisual.astro';
+import { servicesData, type ServiceData } from '../../data/services';
+import { getAssetUrl } from '../../utils/paths';
+
+export function getStaticPaths() {
+  return Object.keys(servicesData).map((slug) => ({
+    params: { slug },
+    props: { service: servicesData[slug] }
+  }));
+}
+
+interface Props {
+  service: ServiceData;
+}
+
+const { service } = Astro.props;
+const siteUrl = Astro.site ?? 'https://Purks1337.github.io';
+const currentUrl = new URL(getAssetUrl(`/uslugi/${service.slug}/`), siteUrl).href;
+const catalogUrl = new URL(getAssetUrl('/uslugi/'), siteUrl).href;
+const homeUrl = new URL(getAssetUrl('/'), siteUrl).href;
+
+// Breadcrumb Schema
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Главная",
+      "item": homeUrl
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Услуги",
+      "item": catalogUrl
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": service.h1,
+      "item": currentUrl
+    }
+  ]
+};
+
+// Service Schema
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": service.h1,
+  "serviceType": service.schemaType,
+  "description": service.description,
+  "provider": {
+    "@type": "LocalBusiness",
+    "name": "Хвалите Media",
+    "image": new URL(getAssetUrl('/assets/img/showreel.jpg'), siteUrl).href,
+    "telephone": "+79923410520",
+    "email": "hvaliteq@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ул. Ботаническая, 19",
+      "addressLocality": "Екатеринбург",
+      "addressRegion": "Свердловская область",
+      "addressCountry": "RU"
+    }
+  },
+  "areaServed": [
+    { "@type": "City", "name": "Екатеринбург" },
+    { "@type": "AdministrativeArea", "name": "Свердловская область" },
+    { "@type": "Country", "name": "Россия" }
+  ],
+  "url": currentUrl
+};
+
+// FAQ Schema
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": service.faqs.map(f => ({
+    "@type": "Question",
+    "name": f.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": f.a
+    }
+  }))
+};
+
+// Related services data
+const relatedServices = service.relatedSlugs
+  .map(slug => servicesData[slug])
+  .filter(Boolean);
+---
+
+<Layout
+  title={service.title}
+  description={service.description}
+  ogTitle={service.ogTitle}
+  ogDescription={service.ogDescription}
+  canonicalUrl={currentUrl}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <Header />
+
+  <main class="service-page">
+    <!-- Breadcrumbs -->
+    <div class="bc-bar">
+      <div class="wrap">
+        <nav aria-label="Хлебные крошки" class="bc-nav">
+          <a href={getAssetUrl('/')} class="bc-link">Главная</a>
+          <span class="bc-sep">/</span>
+          <a href={getAssetUrl('/uslugi/')} class="bc-link">Услуги</a>
+          <span class="bc-sep">/</span>
+          <span class="bc-current">{service.h1}</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- 01. Первый экран #top -->
+    <section id="top" class="s-hero">
+      <div class="wrap s-hero-grid">
+        <div class="s-hero-content">
+          <div class="s-hero-tag">
+            <span class="tag-num">{service.num}</span>
+            <span class="tag-badge">{service.badge}</span>
+          </div>
+
+          <h1 id="hero-h1" class="s-hero-title">{service.h1}</h1>
+
+          <p id="hero-sub" class="s-hero-sub">{service.sub}</p>
+
+          <ul class="s-benefits">
+            {service.benefits.map((b) => (
+              <li class="s-benefit-item">
+                <svg class="s-star-icon" viewBox="0 0 200 200" width="18" height="18" aria-hidden="true">
+                  <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#3358F4" stroke="#3358F4" stroke-width="8"></polygon>
+                </svg>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="s-hero-actions">
+            <a href="#zayavka" class="btn-primary">Рассчитать смету</a>
+            <a href="#kejsy" class="btn-secondary">Смотреть кейсы</a>
+          </div>
+
+          <div class="s-trust-bar">
+            <span class="s-trust-label">КЛИЕНТЫ:</span>
+            <span class="s-trust-text">{service.trustText}</span>
+          </div>
+        </div>
+
+        <div class="s-hero-visual-col">
+          <ServiceHeroVisual figure={service.heroFigure} />
+        </div>
+      </div>
+    </section>
+
+    <!-- 02. Задачи и форматы #formaty -->
+    <section id="formaty" class="sec sec-light">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-tag-group">
+            <span class="sec-num-label">02 · ЗАДАЧИ И ФОРМАТЫ</span>
+            <h2 class="sec-title">{service.formatsTitle}</h2>
+          </div>
+          <p class="sec-intro">{service.formatsIntro}</p>
+        </div>
+
+        <div class="formats-grid">
+          {service.formats.map((f, idx) => (
+            <div class="format-card">
+              <span class="format-num">0{idx + 1}</span>
+              <h3 class="format-title">{f.title}</h3>
+              <p class="format-desc">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Honest Section for AI if present -->
+        {service.honestSection && (
+          <div class="honest-block">
+            <div class="honest-head">
+              <h3 class="honest-title">{service.honestSection.title}</h3>
+              <p class="honest-intro">{service.honestSection.intro}</p>
+            </div>
+            <div class="honest-table">
+              <div class="honest-row honest-header-row">
+                <div class="honest-col-ai">Нейросети хорошо делают</div>
+                <div class="honest-col-human">Здесь без людей не обойтись</div>
+              </div>
+              {service.honestSection.rows.map(r => (
+                <div class="honest-row">
+                  <div class="honest-col-ai"><span class="badge-ai">AI</span> {r.ai}</div>
+                  <div class="honest-col-human"><span class="badge-human">Команда</span> {r.human}</div>
+                </div>
+              ))}
+            </div>
+            <p class="honest-conclusion">{service.honestSection.conclusion}</p>
+          </div>
+        )}
+
+        {service.formatNotes && service.formatNotes.length > 0 && (
+          <div class="cross-hints">
+            {service.formatNotes.map(n => (
+              <div class="cross-hint-item">
+                <span>{n.text}</span>
+                <a href={n.url.startsWith('http') ? n.url : getAssetUrl(n.url)} class="cross-hint-link">
+                  {n.linkText}
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- 03. Цены и смета #ceny -->
+    <section id="ceny" class="sec sec-dark">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-tag-group">
+            <span class="sec-num-label sec-num-gold">03 · ЦЕНЫ</span>
+            <h2 class="sec-title sec-title-light">{service.pricingTitle}</h2>
+          </div>
+          <p class="sec-intro sec-intro-light">
+            Прозрачная смета по сменам сразу после брифа. Вы точно знаете, за что платите.
+          </p>
+        </div>
+
+        <div class="packages-grid">
+          {service.packages.map((pkg, idx) => (
+            <div class={`pkg-card ${idx === 1 ? 'pkg-featured' : ''}`}>
+              {idx === 1 && <span class="pkg-popular-tag">ПОПУЛЯРНЫЙ ВЫБОР</span>}
+              <div class="pkg-top">
+                <span class="pkg-idx">ПАКЕТ 0{idx + 1}</span>
+                <h3 class="pkg-name">{pkg.name}</h3>
+                <div class="pkg-price">{pkg.price}</div>
+              </div>
+
+              <div class="pkg-meta">
+                <div class="pkg-meta-row">
+                  <span class="pkg-meta-lbl">Хронометраж:</span>
+                  <span class="pkg-meta-val">{pkg.timing}</span>
+                </div>
+                <div class="pkg-meta-row">
+                  <span class="pkg-meta-lbl">Производство:</span>
+                  <span class="pkg-meta-val">{pkg.shooting}</span>
+                </div>
+                <div class="pkg-meta-row">
+                  <span class="pkg-meta-lbl">Версии:</span>
+                  <span class="pkg-meta-val">{pkg.versions}</span>
+                </div>
+                <div class="pkg-meta-row">
+                  <span class="pkg-meta-lbl">Сроки:</span>
+                  <span class="pkg-meta-val">{pkg.timeline}</span>
+                </div>
+              </div>
+
+              <div class="pkg-includes">
+                <span class="pkg-inc-label">Что входит:</span>
+                <p class="pkg-inc-text">{pkg.includes}</p>
+              </div>
+
+              <a href="#zayavka" class="pkg-btn">Выбрать пакет</a>
+            </div>
+          ))}
+        </div>
+
+        <!-- Breakdown -->
+        <div class="breakdown-wrap">
+          <h3 class="breakdown-title">{service.costBreakdownTitle}</h3>
+          <p class="breakdown-desc">
+            Мы считаем стоимость по сменам специалистов и техники. В смете видно каждую строку:
+          </p>
+          <div class="breakdown-grid">
+            {service.costBreakdownItems.map(item => (
+              <div class="breakdown-card">
+                <h4 class="breakdown-item-title">{item.title}</h4>
+                <p class="breakdown-item-desc">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div class="breakdown-action">
+            <a href="#zayavka" class="btn-primary">Запросить индивидуальную смету</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. Кейсы #kejsy (Windows 98) -->
+    <section id="kejsy" class="sec sec-blue">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-tag-group">
+            <span class="sec-num-label sec-num-white">04 · КЕЙСЫ</span>
+            <h2 class="sec-title sec-title-white">{service.casesTitle}</h2>
+          </div>
+          <p class="sec-intro sec-intro-white">
+            Реальные работы студии. Нажмите на окно, чтобы посмотреть видео, задачу, решение и результат.
+          </p>
+        </div>
+
+        <div class="cases-win-grid">
+          {service.cases.map((c) => (
+            <div class="win98-window">
+              <!-- Window title bar -->
+              <div class="win-tb">
+                <div class="win-tb-title">
+                  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+                    <rect x="1" y="3" width="14" height="10" fill="#E4E3DE"></rect>
+                    <polygon points="6,5.5 11,8 6,10.5" fill="#3358F4"></polygon>
+                  </svg>
+                  <span>{c.file || 'case_player.mp4'} — Свойства</span>
+                </div>
+                <div class="win-tb-btns" aria-hidden="true">
+                  <span class="win-btn">_</span>
+                  <span class="win-btn">□</span>
+                  <span class="win-btn">×</span>
+                </div>
+              </div>
+
+              <!-- Menu Bar -->
+              <div class="win-menubar" aria-hidden="true">
+                <span>Файл</span><span>Правка</span><span>Вид</span><span>Справка</span>
+              </div>
+
+              <!-- Video Screen Placeholder -->
+              <div class="win-screen">
+                <div class="win-screen-overlay">
+                  <span class="win-badge">{c.badge || 'ПРОЕКТ'}</span>
+                  <span class="win-play-indicator">
+                    <span class="rec-dot"></span> PLAY
+                  </span>
+                  <div class="win-center-play">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#1B1B1B">
+                      <polygon points="6,3 20,12 6,21"></polygon>
+                    </svg>
+                  </div>
+                  <span class="win-format-tag">{c.format}</span>
+                </div>
+              </div>
+
+              <!-- Details Tabs -->
+              <div class="win-body">
+                <h3 class="win-case-title">{c.title}</h3>
+
+                <div class="win-field">
+                  <span class="win-field-tag">ЗАДАЧА</span>
+                  <p class="win-field-text">{c.task}</p>
+                </div>
+
+                <div class="win-field">
+                  <span class="win-field-tag">РЕШЕНИЕ</span>
+                  <p class="win-field-text">{c.solution}</p>
+                </div>
+
+                <div class="win-field win-field-result">
+                  <span class="win-field-tag">РЕЗУЛЬТАТ</span>
+                  <p class="win-field-text">{c.result}</p>
+                </div>
+
+                <div class="win-actions">
+                  <a href="#zayavka" class="win-action-btn win-btn-accent">Обсудить такой же</a>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div class="nda-notice">
+          <span class="nda-icon">🔒</span>
+          <span>Часть коммерческих проектов находится под NDA. Детальные презентации и кейсы показываем на личной встрече.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. Этапы и сроки #etapy -->
+    <section id="etapy" class="sec sec-light">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-tag-group">
+            <span class="sec-num-label">05 · ЭТАПЫ РАБОТЫ</span>
+            <h2 class="sec-title">{service.stagesTitle}</h2>
+          </div>
+          <div class="stages-badge-pill">{service.stagesTotal}</div>
+        </div>
+
+        <div class="stages-timeline">
+          {service.stages.map((st) => (
+            <div class="stage-step-card">
+              <div class="stage-step-header">
+                <span class="stage-step-num">0{st.num}</span>
+                <span class="stage-step-time">{st.time}</span>
+              </div>
+              <h3 class="stage-step-title">{st.title}</h3>
+              <p class="stage-step-desc">{st.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {service.stageTip && (
+          <div class="stage-tip-box">
+            <span class="tip-icon">💡</span>
+            <p class="tip-text">{service.stageTip}</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- 06. Почему мы и команда #komanda -->
+    <section id="komanda" class="sec sec-dark">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-tag-group">
+            <span class="sec-num-label sec-num-gold">06 · ПОЧЕМУ МЫ</span>
+            <h2 class="sec-title sec-title-light">{service.whyUsTitle}</h2>
+          </div>
+        </div>
+
+        <div class="why-us-grid">
+          {service.whyUsPoints.map((pt) => (
+            <div class="why-card">
+              <div class="why-card-top">
+                <svg width="20" height="20" viewBox="0 0 200 200" class="why-star" aria-hidden="true">
+                  <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#3358F4" stroke="#3358F4" stroke-width="8"></polygon>
+                </svg>
+                <h3 class="why-card-title">{pt.title}</h3>
+              </div>
+              <p class="why-card-desc">{pt.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div class="team-block">
+          <h3 class="team-block-title">КОМАНДА ПРОЕКТА</h3>
+          <p class="team-block-sub">Специалисты студии, которые ведут эту услугу от первого брифа до мастера:</p>
+
+          <div class="team-cards-grid">
+            {service.teamMembers.map((m) => (
+              <div class="team-mini-card">
+                <div class="team-mini-avatar">
+                  <svg width="36" height="36" viewBox="0 0 200 200" aria-hidden="true">
+                    <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#3358F4" stroke="#B9C6FB" stroke-width="6"></polygon>
+                  </svg>
+                  <span class="team-mini-3d">3D</span>
+                </div>
+                <div class="team-mini-info">
+                  <div class="team-mini-name">{m.name}</div>
+                  <div class="team-mini-role">{m.role}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07. Клиенты #klienty -->
+    <Clients />
+
+    <!-- 08. Отзывы #otzyvy -->
+    <section id="otzyvy" class="sec sec-light">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-tag-group">
+            <span class="sec-num-label">08 · ДОВЕРИЕ</span>
+            <h2 class="sec-title">{service.reviewsTitle}</h2>
+          </div>
+          <div class="reviews-yandex-link">
+            <a href="https://yandex.ru/maps" target="_blank" rel="noopener noreferrer" class="btn-yandex">
+              ⭐ Отзывы на Яндекс Картах ↗
+            </a>
+          </div>
+        </div>
+
+        <div class="reviews-grid">
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">
+              «Снимали презентационный ролик для участия в федеральном конкурсе. Команда Хвалите Media взяла на себя абсолютно всё: от сценария до согласования допуска. Ролик произвёл фурор среди жюри.»
+            </p>
+            <div class="review-author">
+              <span class="review-name">Михаил В.</span>
+              <span class="review-company">Производственная компания, Екатеринбург</span>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">
+              «Отличный подход к смете — всё прозрачно по сменам, никаких сюрпризов в процессе. Сдали точно в согласованный дедлайн, вертикальные нарезки для Telegram разошлись моментально.»
+            </p>
+            <div class="review-author">
+              <span class="review-name">Елена С.</span>
+              <span class="review-company">Директор по маркетингу</span>
+            </div>
+          </div>
+
+          <div class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">
+              «Сложная задача была показать технологию, которую нельзя увидеть глазами. Ребята сделали великолепную графику и саунд-дизайн. Обязательно обратимся снова.»
+            </p>
+            <div class="review-author">
+              <span class="review-name">Дмитрий К.</span>
+              <span class="review-company">Руководитель проекта</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09. FAQ #faq -->
+    <section id="faq" class="sec sec-dark">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-tag-group">
+            <span class="sec-num-label sec-num-gold">09 · ВОПРОСЫ И ОТВЕТЫ</span>
+            <h2 class="sec-title sec-title-light">{service.faqTitle}</h2>
+          </div>
+        </div>
+
+        <div class="faq-list">
+          {service.faqs.map((item, idx) => (
+            <details class="faq-item" open={idx === 0}>
+              <summary class="faq-question">
+                <span class="faq-q-text">{item.q}</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </summary>
+              <div class="faq-answer">
+                <p>{item.a}</p>
+                {item.link && (
+                  <p class="faq-link-p">
+                    <a href={getAssetUrl(item.link.url)} class="faq-answer-link">{item.link.text}</a>
+                  </p>
+                )}
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Экспертный текст #o-usluge -->
+    <section id="o-usluge" class="sec sec-light">
+      <div class="wrap expert-layout">
+        <div class="expert-header">
+          <span class="sec-num-label">10 · ЭКСПЕРТИЗА</span>
+          <h2 class="expert-title">{service.expertH2}</h2>
+        </div>
+
+        <div class="expert-content">
+          {service.expertParagraphs.map(p => (
+            <p class="expert-paragraph">{p}</p>
+          ))}
+
+          {service.expertBullets && service.expertBullets.length > 0 && (
+            <div class="expert-bullets-grid">
+              {service.expertBullets.map(b => (
+                <div class="expert-bullet-card">
+                  <h4 class="expert-bullet-title">{b.title}</h4>
+                  <p class="expert-bullet-desc">{b.desc}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Форма заявки #zayavka -->
+    <section id="zayavka" class="sec sec-blue">
+      <div class="wrap s-form-container">
+        <div class="s-form-info">
+          <span class="sec-num-label sec-num-white">11 · ЗАЯВКА</span>
+          <h2 class="s-form-h2">{service.formH2}</h2>
+          <p class="s-form-sub">{service.formSub}</p>
+
+          <div class="s-form-contacts">
+            <a href="tel:+79923410520" class="s-form-phone">+7 992 341-05-20</a>
+            <div class="s-form-messengers">
+              <a href="https://t.me/hvaliteq" target="_blank" rel="noopener noreferrer" class="msg-btn">Telegram</a>
+              <a href="https://wa.me/79923410520" target="_blank" rel="noopener noreferrer" class="msg-btn">WhatsApp</a>
+              <a href="mailto:hvaliteq@gmail.com" class="msg-btn">Email</a>
+            </div>
+            <div class="s-form-reply-time">
+              ⚡ Ответим за 15 минут в рабочее время
+            </div>
+          </div>
+        </div>
+
+        <form id="lead-form" class="s-form-card" aria-label="Заявка на расчет">
+          <div class="form-body" id="form-body">
+            <label class="form-label">
+              <span class="label-text">ИМЯ ИЛИ КОМПАНИЯ</span>
+              <input type="text" name="name" class="form-input" placeholder="Как к вам обращаться" />
+            </label>
+
+            <label class="form-label">
+              <span class="label-text">ТЕЛЕФОН ИЛИ TELEGRAM *</span>
+              <input type="text" name="contact" required class="form-input" placeholder="+7 999 000-00-00 или @username" />
+            </label>
+
+            <div class="form-label">
+              <span class="label-text">НАПРАВЛЕНИЕ ЗАДАЧИ</span>
+              <div class="chips-group">
+                {service.formChips.map((chip, idx) => (
+                  <label class="chip-item">
+                    <input type="checkbox" name="tags" value={chip} checked={idx === 0} />
+                    <span class="chip-label">{chip}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div class="form-label">
+              <span class="label-text">ОРИЕНТИР ПО БЮДЖЕТУ</span>
+              <select name="budget" class="form-select">
+                {service.budgetOptions.map(opt => (
+                  <option value={opt}>{opt}</option>
+                ))}
+              </select>
+            </div>
+
+            <label class="form-label">
+              <span class="label-text">КОММЕНТАРИЙ К ПРОЕКТУ</span>
+              <textarea name="about" rows="3" class="form-textarea" placeholder="Сроки, ссылки на референсы или ключевые требования"></textarea>
+            </label>
+
+            <label class="form-checkbox-label">
+              <input type="checkbox" required name="agree" checked />
+              <span>Согласен на обработку персональных данных (152-ФЗ)</span>
+            </label>
+
+            <button type="submit" class="form-submit-btn">
+              Рассчитать смету
+            </button>
+          </div>
+
+          <div id="form-success" class="form-success-box" style="display: none;">
+            <div class="success-icon">✓</div>
+            <h3 class="success-title">ГОТОВО!</h3>
+            <p class="success-text">Заявка передана продюсеру. Мы свяжемся с вами в течение 15 минут для уточнения сметы.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 12. Другие услуги (перелинковка) -->
+    <section class="sec sec-dark">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-tag-group">
+            <span class="sec-num-label sec-num-gold">12 · ДРУГИЕ УСЛУГИ</span>
+            <h2 class="sec-title sec-title-light">Вам также может понадобиться</h2>
+          </div>
+          <a href={getAssetUrl('/uslugi/')} class="all-services-link">Все 6 услуг студии →</a>
+        </div>
+
+        <div class="related-grid">
+          {relatedServices.map((rel) => (
+            <a href={getAssetUrl(`/uslugi/${rel.slug}/`)} class="rel-card">
+              <div class="rel-card-top">
+                <span class="rel-num">{rel.num}</span>
+                <span class="rel-badge">{rel.badge}</span>
+              </div>
+              <h3 class="rel-title">{rel.h1}</h3>
+              <p class="rel-desc">{rel.sub}</p>
+              <div class="rel-bottom">
+                <span class="rel-btn">ПОДРОБНЕЕ →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<!-- Dynamic Headline Swap Script (?h=...) -->
+<script is:inline define:vars={{ swapDict: service.swapDict }}>
+  (function () {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var key = params.get('h');
+      if (key && swapDict && swapDict[key]) {
+        var h1El = document.getElementById('hero-h1');
+        var subEl = document.getElementById('hero-sub');
+        if (h1El && swapDict[key].h1) {
+          h1El.textContent = swapDict[key].h1;
+        }
+        if (subEl && swapDict[key].sub) {
+          subEl.textContent = swapDict[key].sub;
+        }
+      }
+    } catch (e) {
+      console.warn('Swap script error:', e);
+    }
+
+    // Lead form submission handling
+    var form = document.getElementById('lead-form');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var body = document.getElementById('form-body');
+        var success = document.getElementById('form-success');
+        if (body && success) {
+          body.style.display = 'none';
+          success.style.display = 'block';
+        }
+        // If Yandex Metrika ym is loaded
+        if (typeof window.ym === 'function') {
+          try {
+            window.ym(99000000, 'reachGoal', 'lead_form');
+          } catch (err) {}
+        }
+      });
+    }
+  })();
+</script>
+
+<style>
+  /* ── Page Layout ── */
+  .service-page {
+    color: #1B1B1B;
+    background: #1B1B1B;
+  }
+
+  .wrap {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 48px);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ── Breadcrumbs ── */
+  .bc-bar {
+    background: #141414;
+    border-bottom: 1px solid #2A2A2A;
+    padding: 10px 0;
+  }
+  .bc-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .bc-link {
+    color: #A8A7A2;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .bc-link:hover {
+    color: #FFFFFF;
+  }
+  .bc-sep {
+    color: #5E5D58;
+  }
+  .bc-current {
+    color: #E4E3DE;
+    font-weight: 700;
+  }
+
+  /* ── Section Commons ── */
+  .sec {
+    padding: 88px 0;
+  }
+  .sec-light {
+    background-color: #E4E3DE;
+    background-image: radial-gradient(rgba(27,27,27,0.12) 1px, transparent 1.3px);
+    background-size: 14px 14px;
+    color: #1B1B1B;
+  }
+  .sec-dark {
+    background-color: #1B1B1B;
+    color: #E4E3DE;
+  }
+  .sec-blue {
+    background-color: #3358F4;
+    background-image: radial-gradient(rgba(255,255,255,0.18) 1.5px, transparent 1.7px);
+    background-size: 26px 26px;
+    color: #FFFFFF;
+  }
+
+  .sec-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px 40px;
+    margin-bottom: 40px;
+  }
+  .sec-tag-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .sec-num-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: #5E5D58;
+  }
+  .sec-num-gold {
+    color: #D4A54C;
+  }
+  .sec-num-white {
+    color: #FFFFFF;
+    opacity: 0.85;
+  }
+  .sec-title {
+    margin: 0;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: clamp(32px, 4.4vw, 56px);
+    line-height: 1.05;
+  }
+  .sec-title-light {
+    color: #E4E3DE;
+  }
+  .sec-title-white {
+    color: #FFFFFF;
+  }
+  .sec-intro {
+    margin: 0;
+    max-width: 480px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #3A3A3A;
+  }
+  .sec-intro-light {
+    color: #A8A7A2;
+  }
+  .sec-intro-white {
+    color: #FFFFFF;
+    opacity: 0.95;
+  }
+
+  /* ── 01. Hero ── */
+  .s-hero {
+    background: #1B1B1B;
+    color: #E4E3DE;
+    padding: 64px 0 88px;
+    border-bottom: 1px solid #2A2A2A;
+  }
+  .s-hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .s-hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .s-hero-tag {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tag-num {
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: #D4A54C;
+  }
+  .tag-badge {
+    padding: 4px 10px;
+    background: #2A2A2A;
+    color: #D4A54C;
+    border: 1px solid #D4A54C;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+  .s-hero-title {
+    margin: 0;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: clamp(32px, 4.2vw, 54px);
+    line-height: 1.08;
+    color: #FFFFFF;
+  }
+  .s-hero-sub {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.55;
+    color: #E4E3DE;
+  }
+  .s-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .s-benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #C3C3C3;
+  }
+  .s-star-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .s-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 28px;
+    background: #3358F4;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    border: 2px solid #3358F4;
+    transition: background 0.15s, border-color 0.15s;
+    box-shadow: 4px 4px 0 #10142E;
+  }
+  .btn-primary:hover {
+    background: #2848D9;
+    border-color: #2848D9;
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 24px;
+    background: transparent;
+    color: #E4E3DE;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    border: 2px solid #3A3A3A;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-secondary:hover {
+    border-color: #E4E3DE;
+    color: #FFFFFF;
+  }
+  .s-trust-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    padding-top: 18px;
+    border-top: 1px solid #2A2A2A;
+    font-size: 13px;
+  }
+  .s-trust-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: #5E5D58;
+    letter-spacing: 0.1em;
+  }
+  .s-trust-text {
+    color: #A8A7A2;
+  }
+
+  /* ── 02. Formats ── */
+  .formats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 20px;
+  }
+  .format-card {
+    background: #FFFFFF;
+    border: 2px solid #1B1B1B;
+    box-shadow: 6px 6px 0 #1B1B1B;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .format-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 #1B1B1B;
+  }
+  .format-num {
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: #3358F4;
+  }
+  .format-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 1.25;
+  }
+  .format-desc {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #3A3A3A;
+  }
+
+  .honest-block {
+    margin-top: 40px;
+    background: #FFFFFF;
+    border: 2px solid #1B1B1B;
+    box-shadow: 8px 8px 0 #1B1B1B;
+    padding: 28px;
+  }
+  .honest-head {
+    margin-bottom: 20px;
+  }
+  .honest-title {
+    margin: 0 0 6px;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+  }
+  .honest-intro {
+    margin: 0;
+    font-size: 15px;
+    color: #5E5D58;
+  }
+  .honest-table {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #1B1B1B;
+  }
+  .honest-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #DFDFDF;
+  }
+  .honest-header-row {
+    background: #1B1B1B;
+    color: #FFFFFF;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  .honest-header-row > div {
+    padding: 12px 16px;
+  }
+  .honest-col-ai, .honest-col-human {
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  .honest-col-ai {
+    border-right: 1px solid #DFDFDF;
+    background: #F8F7F4;
+  }
+  .badge-ai {
+    display: inline-block;
+    padding: 2px 6px;
+    background: #10142E;
+    color: #B9C6FB;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .badge-human {
+    display: inline-block;
+    padding: 2px 6px;
+    background: #3358F4;
+    color: #FFFFFF;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .honest-conclusion {
+    margin: 20px 0 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #3A3A3A;
+  }
+
+  .cross-hints {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border: 2px dashed #1B1B1B;
+  }
+  .cross-hint-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+  .cross-hint-link {
+    color: #3358F4;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .cross-hint-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ── 03. Packages ── */
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+  .pkg-card {
+    position: relative;
+    background: #242424;
+    border: 2px solid #3A3A3A;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .pkg-featured {
+    border-color: #D4A54C;
+    background: #26241E;
+    box-shadow: 8px 8px 0 #10142E;
+  }
+  .pkg-popular-tag {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: #D4A54C;
+    color: #1B1B1B;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+  }
+  .pkg-idx {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+    color: #A8A7A2;
+    letter-spacing: 0.1em;
+  }
+  .pkg-name {
+    margin: 4px 0 12px;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: #FFFFFF;
+  }
+  .pkg-price {
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+    color: #D4A54C;
+  }
+  .pkg-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 0;
+    border-top: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    font-size: 14px;
+  }
+  .pkg-meta-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .pkg-meta-lbl {
+    color: #A8A7A2;
+  }
+  .pkg-meta-val {
+    color: #E4E3DE;
+    font-weight: 600;
+    text-align: right;
+  }
+  .pkg-includes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 1 auto;
+  }
+  .pkg-inc-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: #A8A7A2;
+  }
+  .pkg-inc-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #C3C3C3;
+  }
+  .pkg-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    background: #3358F4;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background 0.15s;
+  }
+  .pkg-btn:hover {
+    background: #2848D9;
+  }
+  .pkg-featured .pkg-btn {
+    background: #D4A54C;
+    color: #1B1B1B;
+  }
+  .pkg-featured .pkg-btn:hover {
+    background: #BF933F;
+  }
+
+  /* ── Cost Breakdown ── */
+  .breakdown-wrap {
+    padding-top: 36px;
+    border-top: 1px solid #2A2A2A;
+  }
+  .breakdown-title {
+    margin: 0 0 8px;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    color: #FFFFFF;
+  }
+  .breakdown-desc {
+    margin: 0 0 24px;
+    font-size: 15px;
+    color: #A8A7A2;
+  }
+  .breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+  .breakdown-card {
+    background: #242424;
+    border: 1px solid #333333;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .breakdown-item-title {
+    margin: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: #D4A54C;
+  }
+  .breakdown-item-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #C3C3C3;
+  }
+  .breakdown-action {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  /* ── 04. Windows 98 Cases ── */
+  .cases-win-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+    gap: 28px;
+  }
+  .win98-window {
+    background: #C3C3C3;
+    padding: 4px;
+    color: #1B1B1B;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+      inset -1px -1px 0 #0A0A0A,
+      inset 1px 1px 0 #FFFFFF,
+      inset -2px -2px 0 #7B7B7B,
+      inset 2px 2px 0 #DFDFDF,
+      8px 8px 0 #10142E;
+  }
+  .win-tb {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 6px;
+    background: linear-gradient(90deg, #10142E, #3358F4);
+    color: #FFFFFF;
+  }
+  .win-tb-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .win-tb-btns {
+    display: flex;
+    gap: 2px;
+  }
+  .win-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 14px;
+    background: #C3C3C3;
+    color: #1B1B1B;
+    font-size: 10px;
+    font-weight: 800;
+    box-shadow:
+      inset -1px -1px 0 #0A0A0A,
+      inset 1px 1px 0 #FFFFFF,
+      inset -2px -2px 0 #7B7B7B,
+      inset 2px 2px 0 #DFDFDF;
+  }
+  .win-menubar {
+    display: flex;
+    gap: 12px;
+    padding: 3px 6px;
+    font-size: 12px;
+    border-bottom: 1px solid #7B7B7B;
+  }
+  .win-screen {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #10142E;
+    box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #FFFFFF;
+    margin: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: radial-gradient(rgba(185,198,251,0.2) 1px, transparent 1.3px);
+    background-size: 12px 12px;
+  }
+  .win-screen-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  .win-badge {
+    align-self: flex-start;
+    padding: 3px 6px;
+    background: #1B1B1B;
+    color: #E4E3DE;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .win-play-indicator {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 6px;
+    background: #3358F4;
+    color: #FFFFFF;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .win-center-play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px;
+    height: 40px;
+    background: #C3C3C3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      inset -1px -1px 0 #0A0A0A,
+      inset 1px 1px 0 #FFFFFF,
+      inset -2px -2px 0 #7B7B7B,
+      inset 2px 2px 0 #DFDFDF,
+      4px 4px 0 #1B1B1B;
+  }
+  .win-format-tag {
+    align-self: flex-start;
+    padding: 3px 6px;
+    background: rgba(16, 20, 46, 0.85);
+    color: #B9C6FB;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .win-body {
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .win-case-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1.25;
+  }
+  .win-field {
+    position: relative;
+    padding: 12px 10px 8px;
+    border: 1px solid #7B7B7B;
+    box-shadow: 1px 1px 0 #FFFFFF, inset 1px 1px 0 #FFFFFF;
+  }
+  .win-field-tag {
+    position: absolute;
+    top: -9px;
+    left: 8px;
+    padding: 0 4px;
+    background: #C3C3C3;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+  .win-field-text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .win-field-result {
+    background: rgba(51, 88, 244, 0.05);
+  }
+  .win-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+  .win-action-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: #C3C3C3;
+    color: #1B1B1B;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 13px;
+    box-shadow:
+      inset -1px -1px 0 #0A0A0A,
+      inset 1px 1px 0 #FFFFFF,
+      inset -2px -2px 0 #7B7B7B,
+      inset 2px 2px 0 #DFDFDF;
+  }
+  .win-action-btn:hover {
+    background: #D4A54C;
+  }
+  .nda-notice {
+    margin-top: 32px;
+    padding: 14px 20px;
+    background: rgba(16, 20, 46, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #E4E3DE;
+  }
+
+  /* ── 05. Stages ── */
+  .stages-badge-pill {
+    padding: 6px 14px;
+    background: #3358F4;
+    color: #FFFFFF;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+  }
+  .stages-timeline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 16px;
+  }
+  .stage-step-card {
+    background: #FFFFFF;
+    border: 2px solid #1B1B1B;
+    box-shadow: 6px 6px 0 #1B1B1B;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .stage-step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .stage-step-num {
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: #3358F4;
+  }
+  .stage-step-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+    color: #5E5D58;
+  }
+  .stage-step-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 1.25;
+  }
+  .stage-step-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #3A3A3A;
+  }
+  .stage-tip-box {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border: 2px solid #1B1B1B;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 4px 4px 0 #1B1B1B;
+  }
+  .tip-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* ── 06. Why Us & Team ── */
+  .why-us-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+  .why-card {
+    background: #242424;
+    border: 1px solid #333333;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .why-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .why-card-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: 18px;
+    color: #FFFFFF;
+  }
+  .why-card-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #C3C3C3;
+  }
+
+  .team-block {
+    padding-top: 36px;
+    border-top: 1px solid #2A2A2A;
+  }
+  .team-block-title {
+    margin: 0 0 6px;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: #FFFFFF;
+  }
+  .team-block-sub {
+    margin: 0 0 24px;
+    font-size: 15px;
+    color: #A8A7A2;
+  }
+  .team-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .team-mini-card {
+    background: #242424;
+    border: 1px solid #333333;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .team-mini-avatar {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    background: #141414;
+    border: 1px solid #3358F4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .team-mini-3d {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    color: #B9C6FB;
+  }
+  .team-mini-name {
+    font-weight: 800;
+    font-size: 16px;
+    color: #FFFFFF;
+  }
+  .team-mini-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #D4A54C;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── 08. Reviews ── */
+  .btn-yandex {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: #FFFFFF;
+    border: 2px solid #1B1B1B;
+    color: #1B1B1B;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+    box-shadow: 4px 4px 0 #1B1B1B;
+  }
+  .btn-yandex:hover {
+    background: #D4A54C;
+  }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 20px;
+  }
+  .review-card {
+    background: #FFFFFF;
+    border: 2px solid #1B1B1B;
+    box-shadow: 6px 6px 0 #1B1B1B;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .review-stars {
+    color: #D4A54C;
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+  .review-text {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #2A2A2A;
+    font-style: italic;
+  }
+  .review-author {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-top: 1px solid #DFDFDF;
+    padding-top: 12px;
+  }
+  .review-name {
+    font-weight: 800;
+    font-size: 15px;
+  }
+  .review-company {
+    font-size: 13px;
+    color: #5E5D58;
+  }
+
+  /* ── 09. FAQ ── */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    background: #242424;
+    border: 1px solid #333333;
+    overflow: hidden;
+  }
+  .faq-question {
+    padding: 20px 24px;
+    font-weight: 700;
+    font-size: 17px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    color: #FFFFFF;
+    user-select: none;
+  }
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+  .faq-icon {
+    font-size: 22px;
+    font-weight: 700;
+    color: #D4A54C;
+    transition: transform 0.2s;
+  }
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+  .faq-answer {
+    padding: 0 24px 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #C3C3C3;
+  }
+  .faq-answer p {
+    margin: 0;
+  }
+  .faq-link-p {
+    margin-top: 8px !important;
+  }
+  .faq-answer-link {
+    color: #B9C6FB;
+    text-decoration: underline;
+  }
+
+  /* ── 10. Expert Content ── */
+  .expert-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .expert-title {
+    margin: 8px 0 0;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: clamp(26px, 3.6vw, 42px);
+    line-height: 1.15;
+  }
+  .expert-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 900px;
+  }
+  .expert-paragraph {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.65;
+    color: #2A2A2A;
+  }
+  .expert-bullets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .expert-bullet-card {
+    background: #FFFFFF;
+    border: 2px solid #1B1B1B;
+    box-shadow: 4px 4px 0 #1B1B1B;
+    padding: 18px;
+  }
+  .expert-bullet-title {
+    margin: 0 0 6px;
+    font-weight: 800;
+    font-size: 16px;
+  }
+  .expert-bullet-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: #5E5D58;
+  }
+
+  /* ── 11. Lead Form ── */
+  .s-form-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .s-form-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .s-form-h2 {
+    margin: 0;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: clamp(32px, 4.4vw, 54px);
+    line-height: 1.05;
+  }
+  .s-form-sub {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+    opacity: 0.95;
+  }
+  .s-form-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .s-form-phone {
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 800;
+    font-size: clamp(22px, 2.4vw, 30px);
+    color: #FFFFFF;
+    text-decoration: none;
+  }
+  .s-form-messengers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .msg-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    border: 2px solid #FFFFFF;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 14px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .msg-btn:hover {
+    background: #FFFFFF;
+    color: #3358F4;
+  }
+  .s-form-reply-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    opacity: 0.9;
+  }
+
+  .s-form-card {
+    background: #FFFFFF;
+    color: #1B1B1B;
+    border: 3px solid #10142E;
+    box-shadow: 12px 12px 0 #10142E;
+    padding: 28px;
+  }
+  .form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .form-label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .label-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: #3A3A3A;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 2px solid #1B1B1B;
+    font-family: inherit;
+    font-size: 15px;
+    background: #FFFFFF;
+    color: #1B1B1B;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #3358F4;
+  }
+  .chips-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip-item input {
+    display: none;
+  }
+  .chip-label {
+    display: block;
+    padding: 6px 12px;
+    background: #F1F0EC;
+    border: 1px solid #1B1B1B;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.12s, color 0.12s;
+  }
+  .chip-item input:checked + .chip-label {
+    background: #1B1B1B;
+    color: #FFFFFF;
+  }
+  .form-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #3A3A3A;
+    cursor: pointer;
+  }
+  .form-checkbox-label input {
+    margin-top: 3px;
+  }
+  .form-submit-btn {
+    min-height: 52px;
+    border: 0;
+    background: #1B1B1B;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 #D4A54C;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .form-submit-btn:hover {
+    background: #3358F4;
+    box-shadow: 4px 4px 0 #10142E;
+  }
+  .form-success-box {
+    text-align: center;
+    padding: 32px 16px;
+  }
+  .success-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #3358F4;
+    color: #FFFFFF;
+    font-size: 32px;
+    font-weight: 900;
+    margin-bottom: 16px;
+  }
+  .success-title {
+    margin: 0 0 8px;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 26px;
+  }
+  .success-text {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #5E5D58;
+  }
+
+  /* ── 12. Related ── */
+  .all-services-link {
+    color: #D4A54C;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .all-services-link:hover {
+    text-decoration: underline;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 20px;
+  }
+  .rel-card {
+    background: #242424;
+    border: 2px solid #333333;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-decoration: none;
+    color: #E4E3DE;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .rel-card:hover {
+    border-color: #3358F4;
+    transform: translateY(-4px);
+  }
+  .rel-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .rel-num {
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    color: #D4A54C;
+  }
+  .rel-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #A8A7A2;
+  }
+  .rel-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: 1.25;
+    color: #FFFFFF;
+  }
+  .rel-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #A8A7A2;
+    flex: 1 1 auto;
+  }
+  .rel-bottom {
+    margin-top: 8px;
+  }
+  .rel-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+    color: #3358F4;
+  }
+  .rel-card:hover .rel-btn {
+    color: #D4A54C;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 960px) {
+    .s-hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .s-form-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sec {
+      padding: 64px 0;
+    }
+    .s-hero {
+      padding: 40px 0 64px;
+    }
+    .honest-row {
+      grid-template-columns: 1fr;
+    }
+    .honest-col-ai {
+      border-right: none;
+      border-bottom: 1px solid #DFDFDF;
+    }
+  }
+</style>

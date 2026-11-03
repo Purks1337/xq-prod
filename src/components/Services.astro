@@ -1,5 +1,7 @@
 ---
 // Services.astro
+import { getAssetUrl } from '../utils/paths';
+
 // AI-видео: 13x13 пикселей звезды
 const SP = [[12, 12], [100, 64], [188, 12], [136, 100], [188, 188], [100, 136], [12, 188], [64, 100]];
 const inStar = (x: number, y: number) => {
@@ -38,7 +40,7 @@ for (let r = 0; r < PN; r++) {
 
     <div class="svc-grid" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
       <!-- 01: Имиджевые ролики -->
-      <a class="svc s-w2" href="#uslugi" style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #1B1B1B; color: #E4E3DE; text-decoration: none">
+      <a class="svc s-w2" href={getAssetUrl('/uslugi/imidzhevyj-rolik/')} style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #1B1B1B; color: #E4E3DE; text-decoration: none">
         <span style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px">
           <span style="font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: 22px">01</span>
           <span style="display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; color: #D4A54C">
@@ -82,7 +84,7 @@ for (let r = 0; r < PN; r++) {
       </a>
 
       <!-- 02: Реклама -->
-      <a class="svc" href="#uslugi" style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #D4A54C; color: #1B1B1B; text-decoration: none">
+      <a class="svc" href={getAssetUrl('/uslugi/reklamnyj-rolik/')} style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #D4A54C; color: #1B1B1B; text-decoration: none">
         <span style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px">
           <span style="font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: 22px">02</span>
           <span style="display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; color: #1B1B1B">AD · 15″</span>
@@ -115,7 +117,7 @@ for (let r = 0; r < PN; r++) {
       </a>
 
       <!-- 03: AI-видео -->
-      <a class="svc" href="#uslugi" style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #10142E; color: #E4E3DE; text-decoration: none">
+      <a class="svc" href={getAssetUrl('/uslugi/ai-video/')} style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #10142E; color: #E4E3DE; text-decoration: none">
         <span style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px">
           <span style="font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: 22px">03</span>
           <span style="display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; color: #B9C6FB">&gt; ПРОМПТ<span class="blink">▍</span></span>
@@ -142,7 +144,7 @@ for (let r = 0; r < PN; r++) {
       </a>
 
       <!-- 04: Документальное кино -->
-      <a class="svc" href="#uslugi" style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #F1F0EC; color: #1B1B1B; text-decoration: none">
+      <a class="svc" href={getAssetUrl('/uslugi/dokumentalnyj-film/')} style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #F1F0EC; color: #1B1B1B; text-decoration: none">
         <span style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px">
           <span style="font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: 22px">04</span>
           <span style="display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; color: #5E5D58">DOC · ИНТЕРВЬЮ</span>
@@ -174,7 +176,7 @@ for (let r = 0; r < PN; r++) {
       </a>
 
       <!-- 05: 3D-ролики -->
-      <a class="svc" href="#uslugi" style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #3358F4; color: #FFFFFF; text-decoration: none">
+      <a class="svc" href={getAssetUrl('/uslugi/3d-rolik/')} style="position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 16px; min-height: 420px; padding: 24px; border: 2px solid #1B1B1B; background: #3358F4; color: #FFFFFF; text-decoration: none">
         <span style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px">
           <span style="font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: 22px">05</span>
           <span style="display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; color: #FFFFFF">X · Y · Z</span>
@@ -212,7 +214,7 @@ for (let r = 0; r < PN; r++) {
       </a>
 
       <!-- 06: Онлайн-трансляции -->
-      <a class="svc s-w3" href="#uslugi" style="position: relative; overflow: hidden; display: flex; flex-wrap: wrap; align-items: stretch; gap: 24px 40px; min-height: 300px; padding: 24px 24px 66px; border: 2px solid #1B1B1B; background: #2A2A2A; color: #E4E3DE; text-decoration: none">
+      <a class="svc s-w3" href={getAssetUrl('/uslugi/onlajn-translyaciya/')} style="position: relative; overflow: hidden; display: flex; flex-wrap: wrap; align-items: stretch; gap: 24px 40px; min-height: 300px; padding: 24px 24px 66px; border: 2px solid #1B1B1B; background: #2A2A2A; color: #E4E3DE; text-decoration: none">
         <span style="position: relative; flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
           <span style="position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px">
             <span style="font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: 22px">06</span>

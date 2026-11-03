@@ -1,10 +1,23 @@
 ---
 // Header.astro
+import { getAssetUrl } from '../utils/paths';
+
+const pathname = Astro.url.pathname;
+const isServicePage = pathname.includes('/uslugi/');
+
+const servicesNav = [
+  { num: '01', title: 'Имиджевый ролик', url: getAssetUrl('/uslugi/imidzhevyj-rolik/') },
+  { num: '02', title: 'Рекламный ролик', url: getAssetUrl('/uslugi/reklamnyj-rolik/') },
+  { num: '03', title: 'AI-видео', url: getAssetUrl('/uslugi/ai-video/') },
+  { num: '04', title: 'Документальный фильм', url: getAssetUrl('/uslugi/dokumentalnyj-film/') },
+  { num: '05', title: '3D-ролики', url: getAssetUrl('/uslugi/3d-rolik/') },
+  { num: '06', title: 'Онлайн-трансляции', url: getAssetUrl('/uslugi/onlajn-translyaciya/') }
+];
 ---
 
 <header class="hdr">
   <div class="hdr-inner">
-    <a href="#top" aria-label="Хвалите Media — на главную" class="hdr-logo">
+    <a href={getAssetUrl('/')} aria-label="Хвалите Media — на главную" class="hdr-logo">
       <span class="hdr-brand">
         <svg aria-hidden="true" width="0.82em" height="0.82em" viewBox="0 0 200 200" class="hdr-star">
           <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#3358F4" stroke="#3358F4" stroke-width="8" stroke-linejoin="round"></polygon>
@@ -16,11 +29,31 @@
 
     <!-- Desktop nav + contacts (hidden on mobile) -->
     <nav aria-label="Разделы сайта" class="hdr-nav">
+      <div class="hdr-dd-wrap">
+        <a href={getAssetUrl('/uslugi/')} class="hdr-link hdr-dd-trigger">
+          Услуги
+          <svg class="hdr-chevron" width="9" height="6" viewBox="0 0 9 6" fill="none"><path d="M1 1.2L4.5 4.8L8 1.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        </a>
+        <div class="hdr-dd-menu" role="menu">
+          {servicesNav.map(s => (
+            <a href={s.url} class="hdr-dd-item" role="menuitem">
+              <span class="hdr-dd-num">{s.num}</span>
+              <span class="hdr-dd-title">{s.title}</span>
+            </a>
+          ))}
+          <a href={getAssetUrl('/uslugi/')} class="hdr-dd-all">Все услуги каталога →</a>
+        </div>
+      </div>
       <a href="#kejsy" class="hdr-link">Кейсы</a>
-      <a href="#uslugi" class="hdr-link">Услуги</a>
-      <a href="#process" class="hdr-link">Как работаем</a>
+      {isServicePage ? (
+        <a href="#ceny" class="hdr-link">Цены</a>
+      ) : null}
+      <a href={isServicePage ? "#etapy" : "#process"} class="hdr-link">Как работаем</a>
       <a href="#klienty" class="hdr-link">Клиенты</a>
       <a href="#komanda" class="hdr-link">Команда</a>
+      {isServicePage ? (
+        <a href="#faq" class="hdr-link">FAQ</a>
+      ) : null}
     </nav>
     <a href="tel:+79923410520" class="hdr-phone">+7 992 341-05-20</a>
     <a href="#zayavka" class="hdr-cta">Обсудить проект</a>
@@ -36,11 +69,30 @@
   <!-- Mobile drawer -->
   <div class="hdr-drawer" aria-hidden="true">
     <nav aria-label="Разделы сайта" class="hdr-drawer-nav">
+      <div class="hdr-drawer-services">
+        <div class="hdr-drawer-services-title">
+          <span>УСЛУГИ</span>
+          <a href={getAssetUrl('/uslugi/')} class="hdr-drawer-all-link">Все →</a>
+        </div>
+        <div class="hdr-drawer-services-grid">
+          {servicesNav.map(s => (
+            <a href={s.url} class="hdr-drawer-service-item">
+              <span class="hdr-drawer-num">{s.num}</span>
+              <span class="hdr-drawer-name">{s.title}</span>
+            </a>
+          ))}
+        </div>
+      </div>
       <a href="#kejsy" class="hdr-drawer-link">Кейсы</a>
-      <a href="#uslugi" class="hdr-drawer-link">Услуги</a>
-      <a href="#process" class="hdr-drawer-link">Как работаем</a>
+      {isServicePage ? (
+        <a href="#ceny" class="hdr-drawer-link">Цены</a>
+      ) : null}
+      <a href={isServicePage ? "#etapy" : "#process"} class="hdr-drawer-link">Как работаем</a>
       <a href="#klienty" class="hdr-drawer-link">Клиенты</a>
       <a href="#komanda" class="hdr-drawer-link">Команда</a>
+      {isServicePage ? (
+        <a href="#faq" class="hdr-drawer-link">FAQ</a>
+      ) : null}
     </nav>
     <div class="hdr-drawer-actions">
       <a href="tel:+79923410520" class="hdr-drawer-phone">+7 992 341-05-20</a>
@@ -126,6 +178,149 @@
 
   .hdr-link:hover {
     color: #3358F4;
+  }
+
+  /* ─── Services Dropdown ─── */
+  .hdr-dd-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .hdr-dd-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .hdr-chevron {
+    transition: transform 0.2s;
+  }
+
+  .hdr-dd-wrap:hover .hdr-chevron {
+    transform: rotate(180deg);
+  }
+
+  .hdr-dd-menu {
+    position: absolute;
+    top: calc(100% - 2px);
+    left: 0;
+    min-width: 250px;
+    background: #1B1B1B;
+    border: 2px solid #3358F4;
+    box-shadow: 6px 6px 0 #10142E;
+    padding: 8px;
+    display: none;
+    flex-direction: column;
+    gap: 3px;
+    z-index: 110;
+  }
+
+  .hdr-dd-wrap:hover .hdr-dd-menu,
+  .hdr-dd-wrap:focus-within .hdr-dd-menu {
+    display: flex;
+  }
+
+  .hdr-dd-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    color: #E4E3DE;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.12s, color 0.12s;
+  }
+
+  .hdr-dd-item:hover {
+    background: #3358F4;
+    color: #FFFFFF;
+  }
+
+  .hdr-dd-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: #D4A54C;
+  }
+
+  .hdr-dd-item:hover .hdr-dd-num {
+    color: #FFFFFF;
+  }
+
+  .hdr-dd-all {
+    margin-top: 4px;
+    padding: 8px 10px 4px;
+    border-top: 1px solid #2A2A2A;
+    color: #B9C6FB;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    text-decoration: none;
+    display: block;
+  }
+
+  .hdr-dd-all:hover {
+    color: #FFFFFF;
+    text-decoration: underline;
+  }
+
+  /* ─── Drawer Services ─── */
+  .hdr-drawer-services {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 8px 0 16px;
+    border-bottom: 1px solid #2A2A2A;
+  }
+
+  .hdr-drawer-services-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: #A8A7A2;
+    letter-spacing: 0.1em;
+  }
+
+  .hdr-drawer-all-link {
+    color: #3358F4;
+    text-decoration: none;
+    font-size: 12px;
+  }
+
+  .hdr-drawer-services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 6px;
+  }
+
+  .hdr-drawer-service-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #242424;
+    border: 1px solid #333333;
+    color: #E4E3DE;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .hdr-drawer-service-item:hover {
+    background: #3358F4;
+    color: #FFFFFF;
+  }
+
+  .hdr-drawer-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #D4A54C;
   }
 
   /* ─── Phone ─── */
@@ -336,8 +531,9 @@
 
     /* Open state */
     .hdr.open .hdr-drawer {
-      max-height: 420px;
-      padding-bottom: 8px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding-bottom: 24px;
     }
 
     .hdr.open .hdr-burger[aria-expanded] {

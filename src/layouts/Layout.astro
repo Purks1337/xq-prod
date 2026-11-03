@@ -5,11 +5,17 @@ import { getAssetUrl } from '../utils/paths';
 interface Props {
   title?: string;
   description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  canonicalUrl?: string;
 }
 
 const {
   title = "Хвалите Media — видеопродакшн в Екатеринбурге",
-  description = "Имиджевые ролики, реклама, AI-видео, документальное кино, 3D-ролики и онлайн-трансляции. Продакшн полного цикла в Екатеринбурге и Свердловской области."
+  description = "Имиджевые ролики, реклама, AI-видео, документальное кино, 3D-ролики и онлайн-трансляции. Продакшн полного цикла в Екатеринбурге и Свердловской области.",
+  ogTitle,
+  ogDescription,
+  canonicalUrl
 } = Astro.props;
 
 const siteUrl = Astro.site ?? 'https://Purks1337.github.io';
@@ -28,13 +34,15 @@ const baseUrl = import.meta.env.BASE_URL;
     <meta name="description" content={description} />
     <meta name="theme-color" content="#1B1B1B" />
     <meta name="generator" content={Astro.generator} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
-    <meta property="og:title" content="Хвалите Media — снимаем так, что хвалят" />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={ogTitle || title} />
+    <meta property="og:description" content={ogDescription || description} />
     <meta property="og:image" content={ogImage} />
+    <slot name="head" />
 
     <!-- Favicon -->
     <link rel="icon" href={faviconUrl} type="image/svg+xml" />
