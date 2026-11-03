@@ -2,25 +2,380 @@
 // Header.astro
 ---
 
-<header style="background: #1B1B1B; color: #E4E3DE; border-bottom: 1px solid #2A2A2A">
-  <div style="max-width: 1280px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 48px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px">
-    <a href="#top" aria-label="Хвалите Media — на главную" style="display: flex; align-items: center; gap: 10px; color: #E4E3DE; text-decoration: none">
-      <span style="display: flex; align-items: baseline; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: 24px; line-height: 1; letter-spacing: -0.02em; gap: 0.05em">
-        <svg aria-hidden="true" width="0.82em" height="0.82em" viewBox="0 0 200 200" style="display: block; flex: 0 0 auto; margin-right: 0.22em">
+<header class="hdr">
+  <div class="hdr-inner">
+    <a href="#top" aria-label="Хвалите Media — на главную" class="hdr-logo">
+      <span class="hdr-brand">
+        <svg aria-hidden="true" width="0.82em" height="0.82em" viewBox="0 0 200 200" class="hdr-star">
           <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#3358F4" stroke="#3358F4" stroke-width="8" stroke-linejoin="round"></polygon>
         </svg>
         <span>ХВАЛИТЕ</span>
       </span>
-      <span style="padding: 5px 10px 6px; border-radius: 999px; background: #3358F4; color: #FFFFFF; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: 0.04em">MEDIA</span>
+      <span class="hdr-badge">MEDIA</span>
     </a>
-    <nav aria-label="Разделы сайта" style="display: flex; flex-wrap: wrap; gap: 6px 22px; flex: 1 1 420px; font-size: 15px; font-weight: 600">
-      <a href="#kejsy" style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Кейсы</a>
-      <a href="#uslugi" style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Услуги</a>
-      <a href="#process" style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Как работаем</a>
-      <a href="#klienty" style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Клиенты</a>
-      <a href="#komanda" style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Команда</a>
+
+    <!-- Desktop nav + contacts (hidden on mobile) -->
+    <nav aria-label="Разделы сайта" class="hdr-nav">
+      <a href="#kejsy" class="hdr-link">Кейсы</a>
+      <a href="#uslugi" class="hdr-link">Услуги</a>
+      <a href="#process" class="hdr-link">Как работаем</a>
+      <a href="#klienty" class="hdr-link">Клиенты</a>
+      <a href="#komanda" class="hdr-link">Команда</a>
     </nav>
-    <a href="tel:+79923410520" style="color: #E4E3DE; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; padding: 10px 0">+7 992 341-05-20</a>
-    <a href="#zayavka" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; background: #3358F4; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px">Обсудить проект</a>
+    <a href="tel:+79923410520" class="hdr-phone">+7 992 341-05-20</a>
+    <a href="#zayavka" class="hdr-cta">Обсудить проект</a>
+
+    <!-- Burger button (visible only on mobile) -->
+    <button class="hdr-burger" aria-label="Меню" aria-expanded="false" type="button">
+      <span class="hdr-burger-line"></span>
+      <span class="hdr-burger-line"></span>
+      <span class="hdr-burger-line"></span>
+    </button>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div class="hdr-drawer" aria-hidden="true">
+    <nav aria-label="Разделы сайта" class="hdr-drawer-nav">
+      <a href="#kejsy" class="hdr-drawer-link">Кейсы</a>
+      <a href="#uslugi" class="hdr-drawer-link">Услуги</a>
+      <a href="#process" class="hdr-drawer-link">Как работаем</a>
+      <a href="#klienty" class="hdr-drawer-link">Клиенты</a>
+      <a href="#komanda" class="hdr-drawer-link">Команда</a>
+    </nav>
+    <div class="hdr-drawer-actions">
+      <a href="tel:+79923410520" class="hdr-drawer-phone">+7 992 341-05-20</a>
+      <a href="#zayavka" class="hdr-drawer-cta">Обсудить проект</a>
+    </div>
   </div>
 </header>
+
+<style>
+  /* ─── Base ─── */
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #1B1B1B;
+    color: #E4E3DE;
+    border-bottom: 1px solid #2A2A2A;
+  }
+
+  .hdr-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 14px clamp(16px, 4vw, 48px);
+    display: flex;
+    align-items: center;
+    gap: 14px 28px;
+  }
+
+  /* ─── Logo ─── */
+  .hdr-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #E4E3DE;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .hdr-brand {
+    display: flex;
+    align-items: baseline;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    gap: 0.05em;
+  }
+
+  .hdr-star {
+    display: block;
+    flex: 0 0 auto;
+    margin-right: 0.22em;
+  }
+
+  .hdr-badge {
+    padding: 5px 10px 6px;
+    border-radius: 999px;
+    background: #3358F4;
+    color: #FFFFFF;
+    font-family: 'Unbounded', 'Arial Black', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── Desktop nav ─── */
+  .hdr-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    flex: 1 1 auto;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .hdr-link {
+    color: #E4E3DE;
+    text-decoration: none;
+    padding: 10px 0;
+    transition: color 0.15s;
+  }
+
+  .hdr-link:hover {
+    color: #3358F4;
+  }
+
+  /* ─── Phone ─── */
+  .hdr-phone {
+    color: #E4E3DE;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 0;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+
+  .hdr-phone:hover {
+    color: #3358F4;
+  }
+
+  /* ─── CTA ─── */
+  .hdr-cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 20px;
+    background: #3358F4;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .hdr-cta:hover {
+    background: #2848D9;
+  }
+
+  /* ─── Burger (hidden by default) ─── */
+  .hdr-burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  .hdr-burger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #E4E3DE;
+    border-radius: 1px;
+    transition: transform 0.25s, opacity 0.25s;
+    transform-origin: center;
+  }
+
+  /* Burger → cross animation */
+  .hdr.open .hdr-burger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .hdr.open .hdr-burger-line:nth-child(2) {
+    opacity: 0;
+  }
+  .hdr.open .hdr-burger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ─── Drawer (mobile only) ─── */
+  .hdr-drawer {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 48px);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), padding 0.35s;
+  }
+
+  .hdr-drawer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid #2A2A2A;
+    padding-top: 12px;
+  }
+
+  .hdr-drawer-link {
+    color: #E4E3DE;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 12px 0;
+    transition: color 0.15s;
+  }
+
+  .hdr-drawer-link:hover {
+    color: #3358F4;
+  }
+
+  .hdr-drawer-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 0 20px;
+    border-top: 1px solid #2A2A2A;
+    margin-top: 8px;
+  }
+
+  .hdr-drawer-phone {
+    color: #E4E3DE;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    transition: color 0.15s;
+  }
+
+  .hdr-drawer-phone:hover {
+    color: #3358F4;
+  }
+
+  .hdr-drawer-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 24px;
+    background: #3358F4;
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    transition: background 0.15s;
+  }
+
+  .hdr-drawer-cta:hover {
+    background: #2848D9;
+  }
+
+  /* ─── Tablet / Compact desktop: ≤1162px ─── */
+  @media (max-width: 1162px) {
+    .hdr-inner {
+      flex-wrap: wrap;
+    }
+
+    /* Logo pushes phone + CTA to the right */
+    .hdr-logo {
+      margin-right: auto;
+    }
+
+    /* Nav drops to second row and spreads across full width */
+    .hdr-nav {
+      order: 10;
+      flex: 0 0 100%;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #2A2A2A;
+      padding-top: 6px;
+      padding-bottom: 4px;
+      margin-top: 2px;
+      gap: 12px;
+      font-size: 14px;
+    }
+  }
+
+  /* ─── Mobile: ≤640px ─── */
+  @media (max-width: 640px) {
+    .hdr-inner {
+      padding: 10px clamp(12px, 4vw, 24px);
+      gap: 8px;
+    }
+
+    .hdr-brand {
+      font-size: 20px;
+    }
+
+    .hdr-badge {
+      font-size: 10px;
+      padding: 4px 8px 5px;
+    }
+
+    /* Hide desktop nav/phone/cta */
+    .hdr-nav,
+    .hdr-phone,
+    .hdr-cta {
+      display: none;
+    }
+
+    /* Show burger */
+    .hdr-burger {
+      display: flex;
+    }
+
+    /* Show drawer container */
+    .hdr-drawer {
+      display: flex;
+    }
+
+    /* Open state */
+    .hdr.open .hdr-drawer {
+      max-height: 420px;
+      padding-bottom: 8px;
+    }
+
+    .hdr.open .hdr-burger[aria-expanded] {
+      /* for accessibility */
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('.hdr');
+    const burger = document.querySelector('.hdr-burger');
+    const drawer = document.querySelector('.hdr-drawer');
+
+    if (!header || !burger || !drawer) return;
+
+    burger.addEventListener('click', () => {
+      const isOpen = header.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(isOpen));
+      drawer.setAttribute('aria-hidden', String(!isOpen));
+    });
+
+    // Close drawer on link click
+    drawer.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        header.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+        drawer.setAttribute('aria-hidden', 'true');
+      });
+    });
+
+    // Close drawer on outside click
+    document.addEventListener('click', (e) => {
+      if (!header.contains(e.target as Node) && header.classList.contains('open')) {
+        header.classList.remove('open');
+        burger.setAttribute('aria-expanded', 'false');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+</script>
