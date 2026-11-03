@@ -1,15 +1,15 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Запуск при каждом пуше в ветку main
+  # Запуск при пуше в main или dev
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   # Возможность ручного запуска из вкладки Actions на GitHub
   workflow_dispatch:
 
-# Права доступа для сборки и развертывания GitHub Pages
+# Права доступа для сборки, сохранения ветки gh-pages и развертывания GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -36,11 +38,59 @@ jobs:
 
       - name: Build site
         run: npm run build
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+
+      - name: Prepare Pages directory and sync with gh-pages branch
+        run: |
+          mkdir -p ./site-deploy
+          cd ./site-deploy
+          git init
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git fetch origin gh-pages:gh-pages 2>/dev/null || true
+          if git rev-parse --verify gh-pages >/dev/null 2>&1; then
+            git checkout gh-pages
+          else
+            git checkout -b gh-pages
+          fi
+          cd ..
+
+          if [ "${{ github.ref_name }}" = "dev" ]; then
+            echo "Обновляем тестовую версию в /dev/..."
+            rm -rf ./site-deploy/dev
+            mkdir -p ./site-deploy/dev
+            cp -r ./dist/* ./site-deploy/dev/
+
+            # Если корень ещё пустой, создаём редирект на /dev/
+            if [ ! -f "./site-deploy/index.html" ]; then
+              echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=./dev/"></head><body>Redirecting to <a href="./dev/">dev</a>...</body></html>' > ./site-deploy/index.html
+            fi
+          else
+            echo "Обновляем боевую версию в корне /..."
+            if [ -d "./site-deploy/dev" ]; then
+              mv ./site-deploy/dev /tmp/dev-backup
+            fi
+            find ./site-deploy -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+            cp -r ./dist/* ./site-deploy/
+            if [ -d "/tmp/dev-backup" ]; then
+              mv /tmp/dev-backup ./site-deploy/dev
+            fi
+          fi
+
+          touch ./site-deploy/.nojekyll
+
+          cd ./site-deploy
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Deploy ${{ github.ref_name }} to Pages [skip ci]" || echo "Нет новых изменений для коммита в gh-pages"
+          git push origin gh-pages
+          cd ..
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./site-deploy
 
   deploy:
     environment:
@@ -52,3 +102,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
