@@ -1,0 +1,77 @@
+---
+// Clients.astro
+import { getAssetUrl } from '../utils/paths';
+
+const clientsList = [
+  { name: 'КАМАЗ' },
+  { name: 'MEDLIGA', hasCase: true },
+  { name: 'Газпром' },
+  { name: 'Пятёрочка' },
+  { name: 'National Geographic' },
+  { name: 'Фестиваль «Пляж»' },
+  { name: 'КХЛ' },
+  { name: 'СИБУР' },
+  { name: 'Свердловская киностудия', img: getAssetUrl('/assets/img/logos/sverdlovsk-kinostudia.png') },
+  { name: 'ЦБО' },
+  { name: 'Сбербанк' },
+  { name: 'LADA' },
+  { name: 'ESOX' },
+  { name: '1.6 Fest' },
+  { name: 'Брусника' },
+  { name: 'Atlas Development', img: getAssetUrl('/assets/img/logos/atlas-development.png') }
+];
+---
+
+<section id="klienty" style="background: #E4E3DE; color: #1B1B1B; padding: 88px 0 80px">
+  <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; margin-bottom: 36px">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: #5E5D58">04 · КЛИЕНТЫ</span>
+      <h2 style="margin: 0; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: clamp(36px, 5vw, 68px); line-height: 1">С КЕМ РАБОТАЛИ</h2>
+    </div>
+    <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 1.5">Где есть кейс — жмите и смотрите. Где NDA — работа под соглашением о неразглашении. Наведите курсор на самый край ленты — она поедет быстрее.</p>
+  </div>
+
+  <div class="mq" data-on-mousemove="mqMove" data-on-mouseleave="mqLeave" style="overflow: hidden; padding: 10px 0 18px">
+    <div class="mq-ltr" data-ref="setTrack" style="display: flex; width: max-content; gap: 20px; padding-left: 20px">
+      <!-- Первый круг логотипов -->
+      {clientsList.map((client) => (
+        <div aria-hidden="false" style="position: relative; flex: 0 0 auto; width: 240px; height: 124px; box-sizing: border-box; padding: 20px 26px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; border: 2px solid #1B1B1B; box-shadow: 6px 6px 0 #1B1B1B">
+          {client.img ? (
+            <img src={client.img} alt={client.name} style="display: block; max-width: 100%; max-height: 64px; object-fit: contain" />
+          ) : (
+            <span style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+              <span style="font-weight: 800; font-size: 20px; line-height: 1.1; letter-spacing: -0.01em">{client.name}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5E5D58">ЖДЁТ ФАЙЛ ЛОГОТИПА</span>
+            </span>
+          )}
+
+          {client.hasCase ? (
+            <a href="#kejsy" tabindex="0" style="position: absolute; right: -2px; top: -2px; padding: 5px 9px; background: #3358F4; color: #FFFFFF; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.08em">КЕЙС ↗</a>
+          ) : (
+            <span style="position: absolute; right: 10px; top: 10px; padding: 2px 8px; border: 2px solid #1B1B1B; transform: rotate(-8deg); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.12em">NDA</span>
+          )}
+        </div>
+      ))}
+
+      <!-- Второй круг логотипов (для бесконечной анимации) -->
+      {clientsList.map((client) => (
+        <div aria-hidden="true" style="position: relative; flex: 0 0 auto; width: 240px; height: 124px; box-sizing: border-box; padding: 20px 26px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; border: 2px solid #1B1B1B; box-shadow: 6px 6px 0 #1B1B1B">
+          {client.img ? (
+            <img src={client.img} alt={client.name} style="display: block; max-width: 100%; max-height: 64px; object-fit: contain" />
+          ) : (
+            <span style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+              <span style="font-weight: 800; font-size: 20px; line-height: 1.1; letter-spacing: -0.01em">{client.name}</span>
+              <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5E5D58">ЖДЁТ ФАЙЛ ЛОГОТИПА</span>
+            </span>
+          )}
+
+          {client.hasCase ? (
+            <a href="#kejsy" tabindex="-1" style="position: absolute; right: -2px; top: -2px; padding: 5px 9px; background: #3358F4; color: #FFFFFF; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.08em">КЕЙС ↗</a>
+          ) : (
+            <span style="position: absolute; right: 10px; top: 10px; padding: 2px 8px; border: 2px solid #1B1B1B; transform: rotate(-8deg); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.12em">NDA</span>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

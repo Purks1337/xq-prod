@@ -1,0 +1,75 @@
+---
+// Hero.astro
+import { getAssetUrl } from '../utils/paths';
+---
+
+<section id="top" data-on-mousemove="heroMove" data-on-mouseleave="heroLeave" style="background: #1B1B1B; color: #E4E3DE; position: relative; overflow: hidden">
+  <svg class="herostar" aria-hidden="true" width="120" height="120" viewBox="0 0 200 200" style="position: absolute; right: 4%; top: 28px; opacity: 0.18">
+    <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#B9C6FB"></polygon>
+  </svg>
+  <div style="max-width: 1280px; margin: 0 auto; padding: 72px clamp(16px, 4vw, 48px) 88px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 56px; align-items: center">
+    <div style="display: flex; flex-direction: column; gap: 26px; min-width: 0">
+      <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: #B9C6FB">ПРОДАКШН ПОЛНОГО ЦИКЛА · ЕКАТЕРИНБУРГ</span>
+      <h1 style="margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: clamp(40px, 6.2vw, 88px); line-height: 1; letter-spacing: -0.02em">
+        <span>СНИМАЕМ</span>
+        <span>ТАК, ЧТО</span>
+        <span style="background: #3358F4; color: #FFFFFF; padding: 0.04em 0.16em 0.1em">ХВАЛЯТ</span>
+      </h1>
+      <p style="margin: 0; max-width: 560px; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5">
+        Имиджевые ролики, реклама, AI-видео, документальное кино, 3D и онлайн-трансляции. Сценарий, съёмка, графика и монтаж — одной командой.
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <a href="#zayavka" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; background: #3358F4; color: #FFFFFF; text-decoration: none; font-weight: 800; font-size: 16px">Обсудить проект</a>
+        <a href="#kejsy" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border: 2px solid #E4E3DE; color: #E4E3DE; text-decoration: none; font-weight: 800; font-size: 16px">Смотреть кейсы</a>
+      </div>
+      <span style="display: flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; color: #A8A7A2">
+        <span aria-hidden="true" class="blink" style="width: 9px; height: 9px; border-radius: 50%; background: #3358F4"></span>
+        ЕКАТЕРИНБУРГ И СВЕРДЛОВСКАЯ ОБЛАСТЬ
+      </span>
+    </div>
+
+    <div class="reelwin" style="background: #C3C3C3; padding: 4px; color: #1B1B1B; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 12px 12px 0 #3358F4; min-width: 0">
+      <div style="display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 8px; background: linear-gradient(90deg, #10142E, #3358F4); color: #FFFFFF">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
+          <rect x="1" y="3" width="14" height="10" fill="#E4E3DE"></rect>
+          <polygon points="6,5.5 11,8 6,10.5" fill="#3358F4"></polygon>
+        </svg>
+        <span style="flex: 1 1 auto; min-width: 0; font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Шоурил_2026.mp4 — Проигрыватель</span>
+        <span aria-hidden="true" style="display: flex; gap: 2px">
+          <span style="display: flex; align-items: center; justify-content: center; width: 18px; height: 16px; background: #C3C3C3; color: #1B1B1B; font-size: 11px; font-weight: 800; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF">_</span>
+          <span style="display: flex; align-items: center; justify-content: center; width: 18px; height: 16px; background: #C3C3C3; color: #1B1B1B; font-size: 10px; font-weight: 800; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF">□</span>
+          <span style="display: flex; align-items: center; justify-content: center; width: 18px; height: 16px; background: #C3C3C3; color: #1B1B1B; font-size: 12px; font-weight: 800; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF">×</span>
+        </span>
+      </div>
+      <div aria-hidden="true" style="display: flex; gap: 16px; padding: 4px 6px; font-size: 13px">
+        <span>Файл</span><span>Вид</span><span>Воспроизведение</span><span>Справка</span>
+      </div>
+      <div style="position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #10142E; box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #FFFFFF">
+        <img class="reelimg" src={getAssetUrl('/assets/img/showreel.jpg')} alt="Режиссёр трансляции за пультом на выездной съёмке" style="display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.1)" />
+        <span style="position: absolute; left: 14px; top: 14px; display: flex; align-items: center; gap: 6px; padding: 5px 9px; background: #1B1B1B; color: #E4E3DE; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.1em">
+          <span aria-hidden="true" class="blink" style="width: 8px; height: 8px; border-radius: 50%; background: #3358F4"></span>
+          REC · SHOWREEL 2026
+        </span>
+        <a class="reelplay" href="#kejsy" aria-label="Смотреть шоурил" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; width: 84px; height: 64px; background: #C3C3C3; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 6px 6px 0 #1B1B1B">
+          <svg aria-hidden="true" width="26" height="26" viewBox="0 0 26 26"><polygon points="6,3 23,13 6,23" fill="#1B1B1B"></polygon></svg>
+        </a>
+      </div>
+      <div aria-hidden="true" style="display: flex; align-items: center; gap: 6px; padding: 6px 4px 4px">
+        <span style="display: flex; align-items: center; justify-content: center; width: 30px; height: 24px; background: #C3C3C3; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF">
+          <svg width="10" height="10" viewBox="0 0 10 10"><polygon points="1,0 10,5 1,10" fill="#1B1B1B"></polygon></svg>
+        </span>
+        <span style="display: flex; align-items: center; justify-content: center; width: 30px; height: 24px; background: #C3C3C3; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF">
+          <svg width="10" height="10" viewBox="0 0 10 10"><rect x="1" y="1" width="8" height="8" fill="#1B1B1B"></rect></svg>
+        </span>
+        <span style="flex: 1 1 auto; height: 14px; background: #FFFFFF; box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #DFDFDF; display: flex">
+          <span style="width: 36%; background: #3358F4"></span>
+        </span>
+      </div>
+      <div aria-hidden="true" style="display: flex; gap: 3px; font-size: 12px">
+        <span style="flex: 1 1 auto; padding: 3px 6px; box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #FFFFFF">Готово</span>
+        <span style="padding: 3px 8px; box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #FFFFFF">4K</span>
+        <span style="padding: 3px 8px; box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #FFFFFF">Хвалите Media</span>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,63 @@
+---
+import '../styles/style.css';
+import { getAssetUrl } from '../utils/paths';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Хвалите Media — видеопродакшн в Екатеринбурге",
+  description = "Имиджевые ролики, реклама, AI-видео, документальное кино, 3D-ролики и онлайн-трансляции. Продакшн полного цикла в Екатеринбурге и Свердловской области."
+} = Astro.props;
+
+const siteUrl = Astro.site ?? 'https://Purks1337.github.io';
+const ogImage = new URL(getAssetUrl('/assets/img/showreel.jpg'), siteUrl).href;
+const faviconUrl = getAssetUrl('/favicon.svg');
+const mainJsUrl = getAssetUrl('/assets/js/main.js');
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1B1B1B" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content="Хвалите Media — снимаем так, что хвалят" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Favicon -->
+    <link rel="icon" href={faviconUrl} type="image/svg+xml" />
+
+    <!-- Google Fonts: Golos Text, JetBrains Mono, Unbounded -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&family=Unbounded:wght@700;800;900&display=swap"
+    />
+
+    <!-- Global Base URL for dynamic asset resolution in scripts -->
+    <script is:inline define:vars={{ baseUrl }}>
+      window.__BASE_URL__ = baseUrl;
+    </script>
+  </head>
+  <body>
+    <div style="font-family: 'Golos Text', 'Segoe UI', sans-serif; color: #1B1B1B; background: #1B1B1B; min-width: 0">
+      <slot />
+    </div>
+
+    <!-- Client interactive script -->
+    <script is:inline src={mainJsUrl} defer></script>
+  </body>
+</html>

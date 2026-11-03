@@ -1,0 +1,101 @@
+---
+// Process.astro
+import { getAssetUrl } from '../utils/paths';
+
+const stages = [
+  { num: '▶', label: 'СТАРТ', x: '7.5%', y: '88.9%', title: 'Заявка', index: 0 },
+  { num: '1', label: 'БРИФ', x: '30%', y: '66.7%', title: 'Бриф и концепция', index: 1 },
+  { num: '2', label: 'ПРЕДПРОДАКШН', x: '40%', y: '50%', title: 'Препродакшн', index: 2 },
+  { num: '3', label: 'СЪЁМКА', x: '50%', y: '63.9%', title: 'Съёмка', index: 3 },
+  { num: '4', label: 'ПОСТПРОДАКШН', x: '65%', y: '77.8%', title: 'Монтаж, графика, звук', index: 4 },
+  { num: '5', label: 'СДАЧА', x: '72.5%', y: '58.3%', title: 'Сдача', index: 5 },
+  { num: '★', label: 'ФИНИШ', x: '92.5%', y: '44.4%', title: 'Ролик в эфире', index: 6 }
+];
+---
+
+<section id="process" style="background: #10142E; color: #E4E3DE; padding: 96px 0">
+  <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px)">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; margin-bottom: 40px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: #B9C6FB">03 · КАК СТРОИТСЯ РАБОТА</span>
+        <h2 style="margin: 0; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: clamp(36px, 5vw, 68px); line-height: 1">ПУТЬ РОЛИКА</h2>
+      </div>
+      <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 1.5">Пройдите карту: жмите на уровни или «Дальше». На каждом этапе — кто за него отвечает и сколько он длится.</p>
+    </div>
+
+    <div style="overflow-x: auto; padding: 0 12px 12px 0">
+      <div style="position: relative; min-width: 760px; aspect-ratio: 20 / 9; border: 4px solid #1B1B1B; box-shadow: 8px 8px 0 #3358F4; overflow: hidden; background: #7CC66A">
+        <img
+          src={getAssetUrl('/assets/img/map/map-pixel.png')}
+          alt="Пиксельная карта городка: почта, офис продюсера, сценарный дом, павильон, монтажная, кинотеатр и площадь со звездой, соединённые дорогой"
+          style="position: absolute; inset: 0; display: block; width: 100%; height: 100%"
+        />
+        <span style="position: absolute; left: 12px; top: 12px; display: flex; align-items: center; gap: 14px; padding: 7px 12px; background: #1B1B1B; border: 3px solid #E4E3DE; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; color: #E4E3DE; z-index: 4">
+          МИР 1 · ХВАЛИТЕ MEDIA
+          <span style="display: flex; align-items: center; gap: 6px; color: #FFFFFF">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 200 200"><polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#D4A54C" stroke="#D4A54C" stroke-width="8" stroke-linejoin="round"></polygon></svg>
+            <span data-b-text="passed">0</span>/5
+          </span>
+        </span>
+
+        {stages.map((s) => (
+          <div style={`position: absolute; left: ${s.x}; top: ${s.y}; transform: translate(-50%, -22px); display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2`}>
+            <button
+              data-on-click={`nodes.${s.index}.go`}
+              aria-label={`Этап: ${s.title}`}
+              style={`width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; border: 3px solid #FFFFFF; background: ${s.index === 0 ? '#3358F4' : '#1B1B1B'}; color: #FFFFFF; font-family: Unbounded, sans-serif; font-weight: 900; font-size: 18px; cursor: pointer; box-shadow: ${s.index === 0 ? '0 0 0 5px rgba(51,88,244,0.45), ' : ''}4px 4px 0 #1B1B1B`}
+              data-b-style={`nodes.${s.index}.btn`}
+            >
+              {s.num}
+            </button>
+            <span style="padding: 3px 6px; background: #1B1B1B; border: 2px solid #E4E3DE; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; white-space: nowrap">
+              {s.label}
+            </span>
+          </div>
+        ))}
+
+        <!-- Персонаж, бегающий по карте -->
+        <div class="hero" data-ref="setHero" aria-hidden="true" style="position: absolute; left: 7.5%; top: 88.9%; width: 0; height: 0; z-index: 3; pointer-events: none">
+          <span style="position: absolute; left: -15px; top: -15px; width: 30px; height: 8px; display: block; border-radius: 50%; background: rgba(27,27,27,0.28)"></span>
+          <img class="spr-idle" src={getAssetUrl('/assets/img/map/hero-idle.webp')} alt="" style="position: absolute; left: 0; bottom: 0; height: 64px; width: auto; image-rendering: pixelated" />
+          <img class="spr-run" src={getAssetUrl('/assets/img/map/hero-run.webp')} alt="" style="position: absolute; left: 0; bottom: 0; height: 56px; width: auto; image-rendering: pixelated" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Карточка текущего этапа -->
+    <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 20px; padding: 22px; background: #1B1B1B; border: 4px solid #E4E3DE; box-shadow: inset 0 0 0 4px #1B1B1B, inset 0 0 0 6px #5E5D58">
+      <div aria-hidden="true" style="flex: 0 0 auto; width: 84px; height: 84px; display: flex; align-items: center; justify-content: center; background: #3358F4; border: 3px solid #E4E3DE">
+        <svg width="58" height="58" viewBox="-16 -16 244 244">
+          <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" transform="translate(12 12)" fill="#1B1B1B" stroke="#1B1B1B" stroke-width="16" stroke-linejoin="round"></polygon>
+          <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#FFFFFF" stroke="#1B1B1B" stroke-width="16" stroke-linejoin="round" paint-order="stroke"></polygon>
+        </svg>
+      </div>
+      <div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px">
+          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; color: #B9C6FB">
+            <span data-b-text="st.who">ПРОДЮСЕР</span>:
+          </span>
+          <span style="font-weight: 800; font-size: 22px; color: #FFFFFF">
+            <span data-b-text="st.title">Заявка</span>
+          </span>
+          <span data-if="st.hasTime" style="display: none">
+            <span style="padding: 3px 8px; background: #3358F4; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.08em">
+              <span data-b-text="st.time"></span>
+            </span>
+          </span>
+        </div>
+        <p aria-live="polite" style="margin: 0; font-size: 18px; line-height: 1.55; color: #E4E3DE">
+          <span data-b-text="st.text">Оставьте заявку или напишите в Telegram. Созвонимся и разберёмся в задаче.</span>
+        </p>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 8px">
+          <button data-on-click="prev" disabled data-b-disabled="prevDisabled" style="min-height: 44px; padding: 0 18px; border: 2px solid #E4E3DE; background: transparent; color: #E4E3DE; font-family: JetBrains Mono, monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; cursor: default; opacity: 0.4" data-b-style="prevStyle">◀ НАЗАД</button>
+          <button data-on-click="next" style="min-height: 44px; padding: 0 18px; border: 0; background: #E4E3DE; color: #1B1B1B; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; cursor: pointer; box-shadow: 4px 4px 0 #3358F4">
+            <span data-b-text="nextLabel">ДАЛЬШЕ ▶</span>
+          </button>
+          <span aria-hidden="true" class="blink" style="margin-left: auto; color: #E4E3DE; font-size: 16px">▼</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

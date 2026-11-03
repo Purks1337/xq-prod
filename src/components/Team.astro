@@ -1,0 +1,86 @@
+---
+// Team.astro
+const members = [
+  { name: 'Марк', role: 'CEO · РЕЖИССЁР', bio: 'Ведёт компанию и режиссирует проекты.', hasModel: true },
+  { name: 'Анастасия', role: 'ГЕНЕРАЛЬНЫЙ ПРОДЮСЕР', bio: 'Смета, договор и весь путь проекта — от брифа до сдачи.', hasModel: false },
+  { name: 'Сергей', role: 'ОПЕРАЦИОННЫЙ ДИРЕКТОР · ЗВУКОРЕЖИССЁР', bio: 'Процессы внутри команды и звук: запись, чистка, сведение.', hasModel: true },
+  { name: 'Денис', role: 'ТЕХНИЧЕСКИЙ ДИРЕКТОР', bio: 'Техника и съёмочные группы на каждом проекте.', hasModel: true },
+  { name: 'Святослав', role: 'СЦЕНАРИСТ', bio: 'Сценарии — от рекламного ролика до документального фильма.', hasModel: true },
+  { name: 'Олег', role: 'ДИЗАЙНЕР', bio: 'Графика, титры и визуальный стиль проектов.', hasModel: true },
+  { name: 'Георгий', role: '3D-ГЕНЕРАЛИСТ', bio: '3D-графика, анаморфы и всё, что не снять камерой.', hasModel: false },
+  { name: 'Илья', role: 'РЕЖИССЁР МОНТАЖА', bio: 'Собирает из отснятого ролик, который смотрят до конца.', hasModel: true },
+  { name: 'Яна', role: 'SMM-МЕНЕДЖЕР', bio: 'Соцсети: ВКонтакте, Telegram, Instagram.', hasModel: true },
+  { name: 'Михаил', role: 'МАРКЕТОЛОГ', bio: 'Реклама, продвижение и встречи на выставках.', hasModel: false },
+  { name: 'Дарья', role: 'AI CREATOR', bio: 'Ролики и визуал, созданные с помощью нейросетей.', hasModel: true }
+];
+---
+
+<section id="komanda" style="background: #1B1B1B; color: #E4E3DE; padding: 96px 0">
+  <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px)">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; margin-bottom: 40px">
+      <div style="display: flex; flex-direction: column; gap: 14px">
+        <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: #B9C6FB">05 · КОМАНДА</span>
+        <h2 style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: clamp(36px, 5vw, 68px); line-height: 1">
+          КОМАНДА
+          <span style="padding: 6px 10px; border: 2px solid #B9C6FB; color: #B9C6FB; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.1em">3D-СКАНЫ</span>
+        </h2>
+      </div>
+      <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 1.5">Наведите на человека — карточка раскроется, а его 3D-скан повернётся вслед за курсором.</p>
+    </div>
+
+    <div class="team-row" data-ref="setTeamRow" data-on-mousemove="teamMove" data-on-mouseleave="teamLeave" style="display: flex; gap: 0; height: 460px">
+      {members.map((m, index) => (
+        <button
+          class="member"
+          data-on-focus={`team.${index}.focus`}
+          data-on-blur="teamLeave"
+          style="position: relative; min-width: 0; height: 100%; display: block; padding: 0; border: 0; background: transparent; text-align: left; cursor: pointer; font-family: inherit; color: #E4E3DE"
+        >
+          <span class="mlayer" style="position: absolute; top: 0; bottom: 0; left: 4px; right: 4px; display: block; overflow: hidden; pointer-events: none; background-color: #2A2A2A; background-image: radial-gradient(rgba(185,198,251,0.16) 1px, transparent 1.3px); background-size: 10px 10px; transition: background-color .3s, box-shadow .3s">
+            <span style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 2; padding: 2px 6px; border: 1px solid #B9C6FB; color: #B9C6FB; font-family: JetBrains Mono, monospace; font-weight: 700; font-size: 10px; letter-spacing: 0.1em">3D</span>
+            <span class="stage" aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 64px; height: 240px; display: block; transform-origin: 50% 30%">
+              {m.hasModel ? (
+                <canvas class="bustcv" width="600" height="720"></canvas>
+              ) : (
+                <span class="bpos" style="position: absolute; left: 50%; top: 10px; width: 0; height: 0; display: block; perspective: 700px; transform-style: preserve-3d; transform: scale(1.25); transform-origin: 0 62px">
+                  <span class="bust" style="position: absolute; left: 0; top: 0; width: 0; height: 0; display: block; transform-style: preserve-3d">
+                    <span style="position: absolute; left: -40px; top: 20px; width: 80px; height: 100px; box-sizing: border-box; border: 1.5px solid #B9C6FB; border-radius: 50%; transform: rotateY(0deg)"></span>
+                    <span style="position: absolute; left: -40px; top: 20px; width: 80px; height: 100px; box-sizing: border-box; border: 1.5px solid #B9C6FB; border-radius: 50%; transform: rotateY(30deg)"></span>
+                    <span style="position: absolute; left: -40px; top: 20px; width: 80px; height: 100px; box-sizing: border-box; border: 1.5px solid #B9C6FB; border-radius: 50%; transform: rotateY(60deg)"></span>
+                    <span style="position: absolute; left: -40px; top: 20px; width: 80px; height: 100px; box-sizing: border-box; border: 1.5px solid #B9C6FB; border-radius: 50%; transform: rotateY(90deg)"></span>
+                    <span style="position: absolute; left: -40px; top: 20px; width: 80px; height: 100px; box-sizing: border-box; border: 1.5px solid #B9C6FB; border-radius: 50%; transform: rotateY(120deg)"></span>
+                    <span style="position: absolute; left: -40px; top: 20px; width: 80px; height: 100px; box-sizing: border-box; border: 1.5px solid #B9C6FB; border-radius: 50%; transform: rotateY(150deg)"></span>
+                    <span style="position: absolute; left: -29px; top: 6px; width: 58px; height: 58px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -37px; top: 15px; width: 74px; height: 74px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -40px; top: 30px; width: 80px; height: 80px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -37px; top: 51px; width: 74px; height: 74px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -29px; top: 76px; width: 58px; height: 58px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -16px; top: 59px; width: 7px; height: 7px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 0 8px #B9C6FB; transform: translateZ(37px)"></span>
+                    <span style="position: absolute; left: 9px; top: 59px; width: 7px; height: 7px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 0 8px #B9C6FB; transform: translateZ(37px)"></span>
+                    <span style="position: absolute; left: -2px; top: 68px; width: 4px; height: 10px; border-radius: 2px; background: #B9C6FB; transform: translateZ(42px)"></span>
+                    <span style="position: absolute; left: -8px; top: 91px; width: 16px; height: 2px; background: #B9C6FB; transform: translateZ(35px)"></span>
+                    <span style="position: absolute; left: -17px; top: 105px; width: 34px; height: 34px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -17px; top: 122px; width: 34px; height: 34px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -72px; top: 128px; width: 144px; height: 64px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -86px; top: 152px; width: 172px; height: 80px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -90px; top: 182px; width: 180px; height: 86px; box-sizing: border-box; border: 1.5px solid #6F8CFF; border-radius: 50%; transform: rotateX(90deg)"></span>
+                    <span style="position: absolute; left: -86px; top: 150px; width: 172px; height: 180px; box-sizing: border-box; border: 1.5px solid #B9C6FB; border-bottom-color: transparent; border-radius: 50% 50% 0 0; transform: rotateY(0deg)"></span>
+                    <span style="position: absolute; left: -40px; top: 150px; width: 80px; height: 180px; box-sizing: border-box; border: 1.5px solid #B9C6FB; border-bottom-color: transparent; border-radius: 50% 50% 0 0; transform: rotateY(90deg)"></span>
+                  </span>
+                </span>
+              )}
+            </span>
+            <span class="vname" style="position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%) rotate(180deg); writing-mode: vertical-rl; white-space: nowrap; font-weight: 800; font-size: 17px; letter-spacing: 0.02em; color: #E4E3DE">{m.name}</span>
+            <span class="panel" style="position: absolute; left: 0; right: 0; bottom: 0; display: block; padding: 18px 18px 20px; background: #3358F4; color: #FFFFFF">
+              <span style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-weight: 800; font-size: 22px; line-height: 1.1">{m.name}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.08em; line-height: 1.4">{m.role}</span>
+                <span style="font-size: 14px; line-height: 1.45">{m.bio}</span>
+              </span>
+            </span>
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+</section>

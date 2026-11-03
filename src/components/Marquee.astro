@@ -1,0 +1,26 @@
+---
+// Marquee.astro
+const items = [
+  'ИМИДЖЕВЫЕ РОЛИКИ',
+  'РЕКЛАМА',
+  'AI-ВИДЕО',
+  'ДОКУМЕНТАЛЬНОЕ КИНО',
+  '3D-РОЛИКИ',
+  'ОНЛАЙН-ТРАНСЛЯЦИИ'
+];
+// Duplicate for seamless infinite loop
+const loopItems = [...items, ...items];
+---
+
+<div aria-hidden="true" style="background: #3358F4; color: #FFFFFF; overflow: hidden; border-top: 3px solid #10142E; border-bottom: 3px solid #10142E; padding: 18px 0">
+  <div class="mq-rtl" style="display: flex; width: max-content; gap: 34px; align-items: center">
+    {loopItems.map((item) => (
+      <span style="display: flex; align-items: center; gap: 34px; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 800; font-size: 26px; white-space: nowrap">
+        {item}
+        <svg width="22" height="22" viewBox="0 0 200 200">
+          <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#FFFFFF"></polygon>
+        </svg>
+      </span>
+    ))}
+  </div>
+</div>
