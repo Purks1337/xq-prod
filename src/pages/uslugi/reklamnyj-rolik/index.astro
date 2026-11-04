@@ -1,5 +1,6 @@
 ---
 import { getAssetUrl } from '../../../utils/paths';
+import Header from '../../../components/Header.astro';
 ---
 
 <!doctype html>
@@ -32,25 +33,7 @@ import { getAssetUrl } from '../../../utils/paths';
 <div class="fd-cap"><span class="fd-tag">Старт</span><img class="spr-idle" src={getAssetUrl("/assets/img/map/hero-idle.webp")} alt="" width="67" height="141" decoding="async"><img class="spr-run" src={getAssetUrl("/assets/img/map/hero-run.webp")} alt="" width="88" height="124" decoding="async"><span class="fd-knob"></span></div>
 </div>
 </div>
-<header style="background: #1B1B1B; color: #E4E3DE; border-bottom: 1px solid #2A2A2A">
-<div style="max-width: 1280px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 48px); display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px">
-<a href={getAssetUrl("/")} aria-label="Хвалите Media — на главную" style="display: flex; align-items: center; gap: 10px; color: #E4E3DE; text-decoration: none">
-<span style="display: flex; align-items: baseline; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: 24px; line-height: 1; letter-spacing: -0.02em; gap: 0.05em">
-<svg aria-hidden="true" width="0.82em" height="0.82em" viewBox="0 0 200 200" style="display: block; flex: 0 0 auto; margin-right: 0.22em"><polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#3358F4" stroke="#3358F4" stroke-width="8" stroke-linejoin="round"></polygon></svg><span>ХВАЛИТЕ</span>
-</span>
-<span style="padding: 5px 10px 6px; border-radius: 999px; background: #3358F4; color: #FFFFFF; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: 0.04em">MEDIA</span>
-</a>
-<nav aria-label="Разделы сайта" style="display: flex; flex-wrap: wrap; gap: 6px 22px; flex: 1 1 420px; font-size: 15px; font-weight: 600">
-<a href={getAssetUrl("/#kejsy")} style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Кейсы</a>
-<a href={getAssetUrl("/#uslugi")} style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Услуги</a>
-<a href={getAssetUrl("/#process")} style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Как работаем</a>
-<a href={getAssetUrl("/#klienty")} style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Клиенты</a>
-<a href={getAssetUrl("/#komanda")} style="color: #E4E3DE; text-decoration: none; padding: 10px 0">Команда</a>
-</nav>
-<a href="tel:+79923410520" style="color: #E4E3DE; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; padding: 10px 0">+7 992 341-05-20</a>
-<a href="#zayavka" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; background: #3358F4; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px">Обсудить проект</a>
-</div>
-</header>
+<Header />
 <main>
 <section id="top" class="hero" data-fader="Старт">
 <div class="wrap">

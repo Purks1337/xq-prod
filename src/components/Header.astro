@@ -3,7 +3,13 @@
 import { getAssetUrl } from '../utils/paths';
 
 const pathname = Astro.url.pathname;
-const isServicePage = pathname.includes('/uslugi/');
+const isCatalogPage = pathname.endsWith('/uslugi/') || pathname.endsWith('/uslugi');
+const isServicePage = pathname.includes('/uslugi/') && !isCatalogPage;
+
+const casesHref = isCatalogPage ? getAssetUrl('/#kejsy') : '#kejsy';
+const processHref = isServicePage ? '#etapy' : (isCatalogPage ? getAssetUrl('/#process') : '#process');
+const clientsHref = isCatalogPage ? getAssetUrl('/#klienty') : '#klienty';
+const teamHref = isCatalogPage ? getAssetUrl('/#komanda') : '#komanda';
 
 const servicesNav = [
   { num: '01', title: 'Имиджевый ролик', url: getAssetUrl('/uslugi/imidzhevyj-rolik/') },
@@ -44,13 +50,13 @@ const servicesNav = [
           <a href={getAssetUrl('/uslugi/')} class="hdr-dd-all">Все услуги каталога →</a>
         </div>
       </div>
-      <a href="#kejsy" class="hdr-link">Кейсы</a>
+      <a href={casesHref} class="hdr-link">Кейсы</a>
       {isServicePage ? (
         <a href="#ceny" class="hdr-link">Цены</a>
       ) : null}
-      <a href={isServicePage ? "#etapy" : "#process"} class="hdr-link">Как работаем</a>
-      <a href="#klienty" class="hdr-link">Клиенты</a>
-      <a href="#komanda" class="hdr-link">Команда</a>
+      <a href={processHref} class="hdr-link">Как работаем</a>
+      <a href={clientsHref} class="hdr-link">Клиенты</a>
+      <a href={teamHref} class="hdr-link">Команда</a>
       {isServicePage ? (
         <a href="#faq" class="hdr-link">FAQ</a>
       ) : null}
@@ -83,13 +89,13 @@ const servicesNav = [
           ))}
         </div>
       </div>
-      <a href="#kejsy" class="hdr-drawer-link">Кейсы</a>
+      <a href={casesHref} class="hdr-drawer-link">Кейсы</a>
       {isServicePage ? (
         <a href="#ceny" class="hdr-drawer-link">Цены</a>
       ) : null}
-      <a href={isServicePage ? "#etapy" : "#process"} class="hdr-drawer-link">Как работаем</a>
-      <a href="#klienty" class="hdr-drawer-link">Клиенты</a>
-      <a href="#komanda" class="hdr-drawer-link">Команда</a>
+      <a href={processHref} class="hdr-drawer-link">Как работаем</a>
+      <a href={clientsHref} class="hdr-drawer-link">Клиенты</a>
+      <a href={teamHref} class="hdr-drawer-link">Команда</a>
       {isServicePage ? (
         <a href="#faq" class="hdr-drawer-link">FAQ</a>
       ) : null}
