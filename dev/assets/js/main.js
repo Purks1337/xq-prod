@@ -51,7 +51,7 @@
     // 3D-сканы команды по порядку карточек: [модель JSON, текстура JPG]; null — скана пока нет (остаётся каркас).
     this.team3d = [
       [BASE + 'assets/team/mark.json', BASE + 'assets/team/mark.jpg'], // Марк
-      null, // Анастасия
+      [BASE + 'assets/team/anastasia.json', BASE + 'assets/team/anastasia.jpg'], // Анастасия
       [BASE + 'assets/team/sergey.json', BASE + 'assets/team/sergey.jpg'], // Сергей
       [BASE + 'assets/team/denis.json', BASE + 'assets/team/denis.jpg'], // Денис
       [BASE + 'assets/team/svyatoslav.json', BASE + 'assets/team/svyatoslav.jpg'], // Святослав
@@ -59,7 +59,7 @@
       [BASE + 'assets/team/georgy.json', BASE + 'assets/team/georgy.jpg'], // Георгий
       [BASE + 'assets/team/ilya.json', BASE + 'assets/team/ilya.jpg'], // Илья
       [BASE + 'assets/team/yana.json', BASE + 'assets/team/yana.jpg'], // Яна
-      null, // Михаил
+      [BASE + 'assets/team/mikhail.json', BASE + 'assets/team/mikhail.jpg'], // Михаил
       [BASE + 'assets/team/darya.json', BASE + 'assets/team/darya.jpg'] // Дарья
     ];
     this.bust = null;
