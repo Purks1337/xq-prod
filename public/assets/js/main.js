@@ -35,7 +35,7 @@
   class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { caseOpen: -1, stage: 0, sent: false };
+    this.state = { caseOpen: -1, stage: 0, sent: false, showHeroReel: false };
     this.track = null;
     this.teamRow = null;
     this.heroEl = null;
@@ -56,7 +56,7 @@
       [BASE + 'assets/team/denis.json', BASE + 'assets/team/denis.jpg'], // Денис
       [BASE + 'assets/team/svyatoslav.json', BASE + 'assets/team/svyatoslav.jpg'], // Святослав
       [BASE + 'assets/team/oleg.json', BASE + 'assets/team/oleg.jpg'], // Олег
-      null, // Георгий
+      [BASE + 'assets/team/georgy.json', BASE + 'assets/team/georgy.jpg'], // Георгий
       [BASE + 'assets/team/ilya.json', BASE + 'assets/team/ilya.jpg'], // Илья
       [BASE + 'assets/team/yana.json', BASE + 'assets/team/yana.jpg'], // Яна
       null, // Михаил
@@ -335,34 +335,97 @@
     const self = this;
     const stage = this.state.stage;
     const CASES = [
-      { file: 'volzhanka_cum.mp4', cat: '3D-РОЛИК', title: 'Волжанка × ЦУМ', sub: '3D-анаморф для углового LED-экрана ЦУМ, Ульяновск', time: '[ХРОН]', img: BASE + 'assets/img/cases/volzhanka.jpg', alt: '3D-бутылка «Волжанки» на угловом экране ЦУМ',
-        task: 'Остановить прохожих у ЦУМа и заставить их снимать экран на телефон.',
-        sol: '3D-ролик с эффектом объёма: бутылка «выходит» за края углового экрана. Собрали в Blender под точку обзора площадки.',
-        res: '[Впишите результат: охваты, упоминания, отзыв клиента]' },
-      { file: 'yandex_plus_live.mp4', cat: 'ТРАНСЛЯЦИЯ', title: 'Яндекс Плюс × сборная России', sub: 'Многокамерный прямой эфир матч-дня', time: '01:12', img: BASE + 'assets/img/cases/yandex-plus.jpg', alt: 'Студия эфира Яндекс Плюс: ведущие и гости на диванах',
-        task: 'Провести живой эфир матч-дня для аудитории Яндекс Плюс — со звёздами и игроками сборной. Переснять нельзя.',
-        sol: '10 человек на площадке: 5 операторов, режиссёр трансляции, звукорежиссёр, гаффер, осветитель и инженер.',
-        res: 'Эфир прошёл без единого сбоя и по техническим стандартам Яндекса.' },
-      { file: 'medliga_hospital.mp4', cat: 'ИМИДЖЕВЫЙ', title: 'Medliga: больница в Новосибирске', sub: 'Кейс-фильм о новом оборудовании в действующей клинике', time: '02:30', img: '', alt: '',
-        task: 'Показать пользу поставки медтехники в региональную больницу — без пресс-релизного тона.',
-        sol: 'Снимали в работающей операционной и палатах, не сбивая график врачей. В центре — живые врачи и пациенты.',
-        res: 'Ролик работает и как кейс для новых B2B-заказчиков, и как отчёт перед региональным минздравом.' },
-      { file: 'dlb_ai_clip.mp4', cat: 'AI-ВИДЕО', title: 'Клип dlb и шоурил ИИ', sub: '3D-сканы артистов в сгенерированных мирах', time: '01:30', img: '', alt: '',
+      {
+        kinescopeId: 'apkWJSgEJoRMNfrroPHyAF',
+        file: 'yandex_plus_live.mp4',
+        cat: 'ТРАНСЛЯЦИЯ',
+        title: 'Яндекс Плюс × матч сборной России',
+        sub: 'Многокамерный прямой эфир матч-дня со звёздами и игроками',
+        time: '01:12',
+        img: BASE + 'assets/img/cases/yandex-plus.jpg',
+        alt: 'Прямой эфир Яндекс Плюс: студия матча сборной России',
+        task: 'Провести живой эфир матч-дня для аудитории Яндекс Плюс — со звёздами и игроками сборной: Вася Вписка, Карен Аданян, Александр Максименко, Матвей Кисляк, Алексей Хрущев. Переснять нельзя, всё решается в моменте.',
+        sol: 'На площадке работала команда из 10 человек: 5 операторов, режиссёр трансляции, звукорежиссёр, гаффер, осветитель и инженер.',
+        res: 'Эфир прошёл без единого сбоя и строго по стандартам Яндекса. Собрали картинку, которая держала зрителя от первой минуты до финального свистка.'
+      },
+      {
+        kinescopeId: 'bP76PynKdWHrdwDZbjthUZ',
+        file: 'drink_creative.mp4',
+        cat: 'РЕКЛАМА',
+        title: '«Содержимое придумайте сами»',
+        sub: 'Рекламный ролик напитка: неделя от идеи до сдачи',
+        time: '00:45',
+        img: 'https://edge-dallas-1.kinescopecdn.net/b4a16b74-9883-4d55-8a44-6b446eb2b4c8/posters/cd548123-5312-4f62-8a9e-d0572141e559/poster_lg/019a30a9-a59a-7698-85e5-077e6435c8ee.jpg',
+        alt: 'Рекламный ролик напитка «Содержимое придумайте сами»',
+        task: 'Сделать рекламу уровня большого бренда всего за неделю и на минимальном бюджете.',
+        sol: 'Безымянная бутылка, точный свет, вода, стекло и макросъёмка — ни одного кадра, за который стыдно.',
+        res: 'Доказали, что дорогая картинка начинается не с суммы в смете, а с того, как поставлен свет и выстроен кадр.'
+      },
+      {
+        kinescopeId: 'xaGqACBAjVGxWWzAYQrNCi',
+        file: 'vetliga_review.mp4',
+        cat: 'РЕКЛАМА',
+        title: 'Vetliga: обзор оборудования',
+        sub: 'Презентационный ролик для B2B-продаж',
+        time: '01:45',
+        img: 'https://edge-dallas-1.kinescopecdn.net/b4a16b74-9883-4d55-8a44-6b446eb2b4c8/posters/846d2b46-b1a6-4a4d-bfe8-1fc726a6e917/poster_lg/01a1447b-870e-7837-baf2-c13c2374dd24.jpg',
+        alt: 'Vetliga: обзор ветеринарного оборудования',
+        task: 'Показать технику, которую сложно продать по фотографии в каталоге: функционал понятен, только когда видишь её в реальной работе.',
+        sol: 'Собрали рекламно-презентационное видео, показывающее узлы в работе, главные преимущества и простоту управления без затянутых пауз.',
+        res: 'Менеджеры отправляют ролик клиентам вместо получасового созвона — он снимает базовые вопросы и доводит до заявки.'
+      },
+      {
+        kinescopeId: 'uHyCrR3Qzr3iG3XKp6AwtM',
+        file: 'dlb_ai_clip.mp4',
+        cat: 'AI-ВИДЕО',
+        title: 'Шоурил AI-генераций и клип dlb',
+        sub: '3D-сканы артистов в сгенерированных мирах',
+        time: '01:30',
+        img: 'https://edge-dallas-1.kinescopecdn.net/b4a16b74-9883-4d55-8a44-6b446eb2b4c8/posters/84f01c8d-7774-4c5d-af5c-38e5101a9010/poster_lg/01a1447e-819d-7313-976d-f35cc07de221.jpg',
+        alt: 'Шоурил AI-генераций и клип dlb',
         task: 'Показать миры, которые невозможно или слишком дорого снять камерой.',
-        sol: 'Отсканировали артистов группы dlb в 3D и поместили их цифровые аватары в миры, собранные нейросетями и CGI.',
-        res: 'Клиент принял работу с первого раза, без правок.' },
-      { file: 'vetliga_review.mp4', cat: 'РЕКЛАМА', title: 'Vetliga: обзор оборудования', sub: 'Презентационный ролик для B2B-продаж', time: '01:45', img: '', alt: '',
-        task: 'Продать дорогую ветеринарную технику, которую не объяснить каталогом.',
-        sol: 'Показали узлы в работе, главные преимущества и простоту управления — без затянутых пауз.',
-        res: 'Менеджеры отправляют ссылку на ролик вместо долгого вводного созвона.' },
-      { file: 'cosmetics_product.mp4', cat: 'РЕКЛАМА', title: 'Косметика: продуктовый ролик', sub: 'Один съёмочный день, две недели подготовки', time: '00:45', img: '', alt: '',
-        task: 'Снять косметику так, чтобы она выглядела дороже, чем на полке.',
-        sol: 'Две недели препродакшна: тесты света, раскадровки, пробы фактур. Сама съёмка — один день.',
-        res: 'Кинематографичная картинка для сайта бренда и рекламы.' },
-      { file: 'dance_school_doc.mp4', cat: 'ДОКУМЕНТАЛЬНОЕ', title: 'Школа хореографии', sub: 'Документальный фильм к юбилею школы', time: '04:10', img: '', alt: '',
-        task: 'Уйти от протокольного отчёта к фильму, который тронет зрителей.',
-        sol: 'Интервью педагогов, отдавших школе десятилетия, и детей, которые только начинают. Плюс пластика танца.',
-        res: 'На закрытом показе зал аплодировал со слезами на глазах.' }
+        sol: 'Отсканировали артистов группы dlb в 3D и поместили их цифровые аватары внутрь игровой вселенной через AI и CGI.',
+        res: 'Нестандартная задача даже по меркам AI-продакшена — клиент принял результат с первого раза и без единой правки.'
+      },
+      {
+        kinescopeId: 'b2cDjUfESLQUpa3LLbZ5LZ',
+        file: 'cosmetics_product.mp4',
+        cat: 'РЕКЛАМА',
+        title: 'Косметика: продуктовый ролик',
+        sub: 'Один съёмочный день, две недели подготовки',
+        time: '00:45',
+        img: 'https://edge-dallas-1.kinescopecdn.net/b4a16b74-9883-4d55-8a44-6b446eb2b4c8/posters/6e52e901-510a-470a-8a7f-aa6c431a6451/poster_lg/f214644a-bff3-4a96-ac42-a358cfe2c444.jpg',
+        alt: 'Косметика: продуктовый рекламный ролик',
+        task: 'Снять косметику так, чтобы продукт на экране выглядел дороже, чем на полке.',
+        sol: 'Две недели препродакшна: раскадровка, тесты света, подбор фактур, отработка каждого микродвижения. Сама съёмка заняла один день без импровизаций.',
+        res: 'Кинематографичная картинка для сайта бренда, маркетплейсов и таргетированной рекламы.'
+      },
+      {
+        kinescopeId: 'oYZx7Qd5NUSAi7s3cNGS5d',
+        file: 'dance_school_doc.mp4',
+        cat: 'ДОКУМЕНТАЛЬНОЕ',
+        title: 'Школа хореографии',
+        sub: 'Документальный фильм к юбилею школы',
+        time: '04:10',
+        img: 'https://edge-dallas-1.kinescopecdn.net/b4a16b74-9883-4d55-8a44-6b446eb2b4c8/posters/b837c9a2-cd44-45b6-9209-f1ecf3106334/poster_lg/01a1447a-123a-705e-af48-18919183c4a7.jpg',
+        alt: 'Документальный фильм о школе хореографии',
+        task: 'Уйти от протокольного отчёта к фильму, который по-настоящему тронет зрителей к юбилею школы.',
+        sol: 'Искренние интервью педагогов, отдавших школе десятилетия, и детей, которые приходят в зал раньше родителей. Плюс пластика танца.',
+        res: 'На премьере в зале плакали. Видео стало историей, которую пересматривают годами.'
+      },
+      {
+        kinescopeId: 'jicVUoBtLdkRD8Qd2G3jYN',
+        file: 'medliga_hospital.mp4',
+        cat: 'ИМИДЖЕВЫЙ',
+        title: 'Medliga: больница в Новосибирске',
+        sub: 'Кейс-фильм о новом оборудовании в действующей клинике',
+        time: '02:30',
+        img: 'https://edge-dallas-1.kinescopecdn.net/b4a16b74-9883-4d55-8a44-6b446eb2b4c8/posters/8f0db9d3-64f9-4af9-8d5e-45652042992f/poster_lg/01a14483-e013-722e-9d67-a28f643fcc60.jpg',
+        alt: 'Medliga: фильм о новом оборудовании в больнице Новосибирска',
+        task: 'Показать, как новое медицинское оборудование меняет работу клиники — не в формате пресс-релиза, а через живых врачей.',
+        sol: 'Снимали в действующей больнице, не нарушая графика операций и приёма. В центре истории — люди, которые на нём работают.',
+        res: 'Кейс отлично работает и для привлечения новых заказчиков медицинского оборудования, и как отчёт перед регионом.'
+      }
     ];
     const open = (i) => () => self.setState({ caseOpen: i });
     const fc = CASES[0];
@@ -374,10 +437,14 @@
     const tasks = CASES.map((c, i) => ({
       title: c.title,
       open: open(i),
-      style: 'flex: 0 0 auto; max-width: 200px; height: 44px; padding: 0 12px; border: 0; background: ' + (this.state.caseOpen === i ? '#E4E3DE' : '#C3C3C3') + '; color: #1B1B1B; font-family: inherit; font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; box-shadow: ' + (this.state.caseOpen === i ? sunken : raised)
+      style: 'flex: 0 0 auto; max-width: 220px; height: 44px; padding: 0 12px; border: 0; background: ' + (this.state.caseOpen === i ? '#E4E3DE' : '#C3C3C3') + '; color: #1B1B1B; font-family: inherit; font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; box-shadow: ' + (this.state.caseOpen === i ? sunken : raised)
     }));
     const showCase = this.state.caseOpen >= 0;
-    const dlg = showCase ? CASES[this.state.caseOpen] : CASES[0];
+    const curCase = showCase ? CASES[this.state.caseOpen] : CASES[0];
+    const dlg = Object.assign({}, curCase, {
+      embedUrl: showCase ? 'https://kinescope.io/embed/' + curCase.kinescopeId + '?autoplay=1' : '',
+      kinescopeUrl: 'https://kinescope.io/' + curCase.kinescopeId
+    });
 
     const ticker = [];
     const words = ['ИМИДЖЕВЫЕ РОЛИКИ', 'РЕКЛАМА', 'AI-ВИДЕО', 'ДОКУМЕНТАЛЬНОЕ КИНО', '3D-РОЛИКИ', 'ОНЛАЙН-ТРАНСЛЯЦИИ'];
@@ -470,6 +537,9 @@
       fc: fc, grid: grid, tasks: tasks, showCase: showCase, dlg: dlg,
       openFeatured: open(0),
       closeCase: () => self.setState({ caseOpen: -1 }),
+      showHeroReel: !!this.state.showHeroReel,
+      heroReelUrl: this.state.showHeroReel ? 'https://kinescope.io/embed/nEadicVPUJhzLd4uRqTCZy?autoplay=1' : '',
+      playShowreel: () => self.setState({ showHeroReel: true }),
       ticker: ticker, logos: logos, pix: pix,
       // Шоурил следит за курсором: окно наклоняется к нему, кадр и звезда сдвигаются в противофазе, кнопка «притягивается».
       heroMove: (e) => {
