@@ -456,10 +456,27 @@
     for (let r = 0; r < 2; r++) words.forEach((w) => ticker.push(w));
 
     const L = [
-      { name: 'КАМАЗ' }, { name: 'MEDLIGA', c: true }, { name: 'Газпром' }, { name: 'Пятёрочка' },
-      { name: 'National Geographic' }, { name: 'Фестиваль «Пляж»' }, { name: 'КХЛ' }, { name: 'СИБУР' },
-      { name: 'Свердловская киностудия', img: BASE + 'assets/img/logos/sverdlovsk-kinostudia.png' }, { name: 'ЦБО' }, { name: 'Сбербанк' }, { name: 'LADA' },
-      { name: 'ESOX' }, { name: '1.6 Fest' }, { name: 'Брусника' }, { name: 'Atlas Development', img: BASE + 'assets/img/logos/atlas-development.png' }
+      { name: 'КАМАЗ', img: BASE + 'assets/img/logos/kamaz.svg' },
+      { name: 'MEDLIGA', img: BASE + 'assets/img/logos/medliga.svg', c: true },
+      { name: 'Газпром', img: BASE + 'assets/img/logos/gazprom.svg' },
+      { name: 'Пятёрочка', img: BASE + 'assets/img/logos/pyaterochka.svg' },
+      { name: 'Фестиваль «Пляж»', img: BASE + 'assets/img/logos/plyazh.svg' },
+      { name: 'КХЛ', img: BASE + 'assets/img/logos/khl.svg' },
+      { name: 'СИБУР', img: BASE + 'assets/img/logos/sibur.svg' },
+      { name: 'Свердловская киностудия', img: BASE + 'assets/img/logos/kinostudia.svg' },
+      { name: 'Сбер', img: BASE + 'assets/img/logos/sber.svg' },
+      { name: 'LADA', img: BASE + 'assets/img/logos/lada.svg' },
+      { name: 'ESOX', img: BASE + 'assets/img/logos/esox.svg' },
+      { name: 'Брусника', img: BASE + 'assets/img/logos/brusnika.svg' },
+      { name: 'Atlas Development', img: BASE + 'assets/img/logos/atlas.svg' },
+      { name: 'VETLIGA', img: BASE + 'assets/img/logos/vetliga.svg', c: true },
+      { name: 'Т-Банк', img: BASE + 'assets/img/logos/tbank.svg' },
+      { name: 'РЖД', img: BASE + 'assets/img/logos/rjd.svg' },
+      { name: 'Синара', img: BASE + 'assets/img/logos/sinara.svg' },
+      { name: 'Ростелеком', img: BASE + 'assets/img/logos/rostelekom.svg' },
+      { name: 'Changan', img: BASE + 'assets/img/logos/changan.svg' },
+      { name: 'МХЛ', img: BASE + 'assets/img/logos/jhl.svg' },
+      { name: 'Netflix', img: BASE + 'assets/img/logos/netflix.svg' }
     ];
     const logos = [];
     for (let r = 0; r < 2; r++) L.forEach((l) => logos.push({
