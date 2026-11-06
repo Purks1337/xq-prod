@@ -1,0 +1,342 @@
+---
+// CasePlayerModal.astro
+// Полноэкранный плеер для кейсов с поддержкой Kinescope и VK Видео
+---
+
+<div id="case-modal" class="case-modal" style="display: none;" role="dialog" aria-modal="true" aria-label="Просмотр кейса">
+  <div class="case-modal-backdrop" id="case-modal-backdrop"></div>
+  <div class="case-modal-window" id="case-modal-window">
+    <div class="case-modal-tb">
+      <div class="case-modal-title">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" style="flex: 0 0 auto">
+          <rect x="1" y="3" width="14" height="10" fill="#E4E3DE"></rect>
+          <polygon points="6,5.5 11,8 6,10.5" fill="#3358F4"></polygon>
+        </svg>
+        <span id="case-modal-title-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap">Проигрыватель кейса</span>
+      </div>
+      <div class="case-modal-actions">
+        <button id="case-modal-fs-btn" class="case-modal-btn" aria-label="Развернуть на весь экран" title="Развернуть на весь экран (F)">⛶</button>
+        <button id="case-modal-close-btn" class="case-modal-btn" aria-label="Закрыть" title="Закрыть (Esc)">×</button>
+      </div>
+    </div>
+    
+    <div class="case-modal-player-wrap" id="case-modal-player-wrap">
+      <iframe
+        id="case-modal-iframe"
+        src=""
+        title="Плеер кейса"
+        allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer; clipboard-write;"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="case-modal-footer">
+      <div class="case-modal-info">
+        <span id="case-modal-badge" class="case-modal-badge">КЕЙС</span>
+        <span id="case-modal-heading" class="case-modal-heading"></span>
+      </div>
+      <div class="case-modal-btns">
+        <a id="case-modal-ext-link" href="#" target="_blank" rel="noopener noreferrer" class="case-modal-link">
+          Смотреть в оригинале ↗
+        </a>
+        <button id="case-modal-close-action" class="case-modal-close-action" type="button">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  .case-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 2.5vw, 24px);
+    box-sizing: border-box;
+  }
+  .case-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 14, 35, 0.86);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .case-modal-window {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 1160px);
+    max-height: calc(100vh - 16px);
+    display: flex;
+    flex-direction: column;
+    background: #C3C3C3;
+    padding: 4px;
+    color: #1B1B1B;
+    box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 14px 14px 0 #10142E;
+    box-sizing: border-box;
+  }
+  .case-modal-tb {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    height: 32px;
+    padding: 0 4px 0 8px;
+    background: linear-gradient(90deg, #10142E, #3358F4);
+    color: #FFFFFF;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .case-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .case-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex: 0 0 auto;
+  }
+  .case-modal-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 22px;
+    background: #C3C3C3;
+    border: 0;
+    padding: 0;
+    color: #1B1B1B;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF;
+  }
+  .case-modal-btn:active {
+    box-shadow: inset 1px 1px 0 #0A0A0A, inset -1px -1px 0 #FFFFFF;
+  }
+  .case-modal-player-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: calc(84vh - 90px);
+    background: #000000;
+    overflow: hidden;
+    box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #FFFFFF;
+  }
+  .case-modal-player-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .case-modal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 8px 6px;
+    font-size: 14px;
+  }
+  .case-modal-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .case-modal-badge {
+    padding: 3px 8px;
+    background: #1B1B1B;
+    color: #E4E3DE;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    flex: 0 0 auto;
+  }
+  .case-modal-heading {
+    font-weight: 800;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .case-modal-btns {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 0 0 auto;
+  }
+  .case-modal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 34px;
+    padding: 0 14px;
+    background: #C3C3C3;
+    color: #1B1B1B;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 13px;
+    box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF;
+  }
+  .case-modal-link:hover {
+    background: #DFDFDF;
+  }
+  .case-modal-close-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 16px;
+    background: #C3C3C3;
+    color: #1B1B1B;
+    border: 0;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF;
+  }
+  .case-modal-close-action:active {
+    box-shadow: inset 1px 1px 0 #0A0A0A, inset -1px -1px 0 #FFFFFF;
+  }
+  @media (max-width: 640px) {
+    .case-modal {
+      padding: 4px;
+    }
+    .case-modal-window {
+      width: 100%;
+      height: 100%;
+      max-height: 100vh;
+      justify-content: space-between;
+    }
+    .case-modal-player-wrap {
+      max-height: 52vh;
+    }
+    .case-modal-heading {
+      white-space: normal;
+      font-size: 13px;
+    }
+  }
+</style>
+
+<script is:inline>
+  function setupCaseFullscreenModal() {
+    var modal = document.getElementById('case-modal');
+    if (!modal || modal.dataset.initDone) return;
+    modal.dataset.initDone = 'true';
+
+    var backdrop = document.getElementById('case-modal-backdrop');
+    var closeBtn = document.getElementById('case-modal-close-btn');
+    var closeAction = document.getElementById('case-modal-close-action');
+    var fsBtn = document.getElementById('case-modal-fs-btn');
+    var iframe = document.getElementById('case-modal-iframe');
+    var titleText = document.getElementById('case-modal-title-text');
+    var heading = document.getElementById('case-modal-heading');
+    var badge = document.getElementById('case-modal-badge');
+    var extLink = document.getElementById('case-modal-ext-link');
+    var modalWindow = document.getElementById('case-modal-window');
+
+    function openModal(data) {
+      if (!data || !data.embed) return;
+      var sep = data.embed.indexOf('?') >= 0 ? '&' : '?';
+      iframe.src = data.embed + sep + 'autoplay=1';
+      titleText.textContent = data.title || 'Проигрыватель';
+      heading.textContent = data.title || '';
+      badge.textContent = data.format || 'КЕЙС';
+      if (data.url) {
+        extLink.href = data.url;
+        extLink.style.display = 'inline-flex';
+        extLink.textContent = (data.service ? 'Смотреть в ' + data.service : 'Смотреть в оригинале') + ' ↗';
+      } else {
+        extLink.style.display = 'none';
+      }
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+      iframe.src = '';
+      document.body.style.overflow = '';
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(function () {});
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        if (modalWindow.requestFullscreen) {
+          modalWindow.requestFullscreen();
+        } else if (modalWindow.webkitRequestFullscreen) {
+          modalWindow.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    if (backdrop) backdrop.addEventListener('click', closeModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (closeAction) closeAction.addEventListener('click', closeModal);
+    if (fsBtn) fsBtn.addEventListener('click', toggleFullscreen);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.style.display !== 'none') {
+        closeModal();
+      }
+      if ((e.key === 'f' || e.key === 'F') && modal.style.display !== 'none') {
+        toggleFullscreen();
+      }
+    });
+
+    // Делегирование кликов по постерам и кнопкам открытия кейсов
+    document.addEventListener('click', function (e) {
+      var trigger = e.target.closest('[data-full-embed]');
+      if (!trigger) return;
+      e.preventDefault();
+      var embed = trigger.getAttribute('data-full-embed');
+      var title = trigger.getAttribute('data-title') || '';
+      var format = trigger.getAttribute('data-format') || '';
+      var url = trigger.getAttribute('data-url') || '';
+      var service = trigger.getAttribute('data-service') || '';
+      openModal({
+        embed: embed,
+        title: title,
+        format: format,
+        url: url,
+        service: service
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        var trigger = document.activeElement && document.activeElement.closest('[data-full-embed]');
+        if (trigger) {
+          e.preventDefault();
+          trigger.click();
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCaseFullscreenModal);
+  } else {
+    setupCaseFullscreenModal();
+  }
+</script>
