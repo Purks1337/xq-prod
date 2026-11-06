@@ -1,6 +1,7 @@
 ---
 import { getAssetUrl } from '../../../utils/paths';
 import Header from '../../../components/Header.astro';
+import SlotMachine from '../../../components/SlotMachine.astro';
 ---
 
 <!doctype html>
@@ -106,6 +107,7 @@ import Header from '../../../components/Header.astro';
 <div class="sec-head"><h2>Сколько стоит онлайн-трансляция</h2><p>Точную сумму считаем по сменам после брифа и присылаем построчную смету.</p></div>
 <div class="pkgs"><article class="pkg"><h3>Эфир на 1–2 камеры</h3><dl><div><dt>Камеры</dt><dd>1–2</dd></div><div><dt>Команда</dt><dd>оператор-режиссёр, инженер</dd></div><div><dt>Что входит</dt><dd>Трансляция на 1 платформу, запись</dd></div><div><dt>Длительность</dt><dd>смена до 18 часов</dd></div></dl><p class="price">от 80 000 ₽</p><a class="btn btn-pkg" href="#zayavka">Рассчитать смету</a></article><article class="pkg pkg-hl"><span class="badge">РЕКОМЕНДУЕМ</span><h3>Многокамерная трансляция</h3><dl><div><dt>Камеры</dt><dd>от 4</dd></div><div><dt>Команда</dt><dd>режиссёр трансляции, операторы, звукорежиссёр, инженер</dd></div><div><dt>Что входит</dt><dd>+ графика (имена спикеров, логотипы, заставки), звук с пульта, 2–3 платформы</dd></div><div><dt>Длительность</dt><dd>смена до 24 часов</dd></div></dl><p class="price">от 150 000 ₽</p><a class="btn btn-pkg" href="#zayavka">Рассчитать смету</a></article><article class="pkg"><h3>Большое событие</h3><dl><div><dt>Камеры</dt><dd>по программе</dd></div><div><dt>Команда</dt><dd>+ гаффер, осветитель, графика, ассистенты</dd></div><div><dt>Что входит</dt><dd>+ повторы, студия с гостями, удалённые спикеры, несколько потоков</dd></div><div><dt>Длительность</dt><dd>по программе</dd></div></dl><p class="price">индивидуально</p><a class="btn btn-pkg" href="#zayavka">Рассчитать смету</a></article></div>
 <dl class="terms"><div><dt>Оплата</dt><dd>50% предоплата, 50% — после утверждения финальной версии</dd></div><div><dt>Правки</dt><dd>два раунда входят в стоимость</dd></div><div><dt>Права</dt><dd>исключительные права переходят вам после полной оплаты</dd></div><div><dt>Документы</dt><dd>договор, акты, счета; работаем с юрлицами и по тендерам</dd></div><div><dt>Скидки</dt><dd>на серийные проекты и работу от двух месяцев</dd></div></dl>
+<SlotMachine />
 </div>
 </section>
 <section id="etapy" class="sec" data-fader="Этапы">

@@ -28,11 +28,9 @@ a{color:#3358F4}a:hover{color:#10142E}
 @keyframes sway{from{transform:rotateY(-26deg) rotateX(6deg)}to{transform:rotateY(26deg) rotateX(-4deg)}}
 .bust{animation:sway 5s ease-in-out infinite alternate;transition:transform .12s linear}
 .member:nth-child(3n) .bust{animation-delay:-1.7s}
-.member:nth-child(3n+1) .bust{animation-delay:-3.4s}
 .following .bust{animation:none}
-.bustcv{position:absolute;left:50%;top:-40px;width:300px;height:360px;transform:translateX(-50%);pointer-events:none;-webkit-mask-image:linear-gradient(to bottom,#000 68%,transparent 96%);mask-image:linear-gradient(to bottom,#000 68%,transparent 96%)}
+.bustcv{position:absolute;left:50%;top:-40px;width:300px;height:360px;transform:translateX(-50%);pointer-events:none;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 58%,rgba(0,0,0,0.8) 64%,transparent 75%);mask-image:linear-gradient(to bottom,#000 0%,#000 58%,rgba(0,0,0,0.8) 64%,transparent 75%)}
 .member .vname{text-shadow:0 0 6px #1B1B1B,0 0 2px #1B1B1B}
-@media (max-width:820px),(hover:none){.team-row{display:grid !important;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));height:auto !important;gap:8px !important}.member{height:420px !important}.mlayer{left:0 !important;right:0 !important}.member .stage{top:20px !important}.member .panel{transform:none}.member .vname{display:none}}
 .reelwin{transition:transform .22s ease-out,box-shadow .22s ease-out;will-change:transform}
 .reelimg,.reelplay,.herostar{transition:transform .3s ease-out}
 .casewin{transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s}

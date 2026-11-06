@@ -1,6 +1,7 @@
 ---
 import { getAssetUrl } from '../../../utils/paths';
 import Header from '../../../components/Header.astro';
+import SlotMachine from '../../../components/SlotMachine.astro';
 ---
 
 <!doctype html>
@@ -110,6 +111,7 @@ import Header from '../../../components/Header.astro';
 <div class="sec-head"><h2>Сколько стоит документальный фильм</h2><p>Точную сумму считаем по сменам после брифа и присылаем построчную смету.</p></div>
 <div class="pkgs"><article class="pkg"><h3>Видеоистория</h3><dl><div><dt>Хронометраж</dt><dd>до 5 мин</dd></div><div><dt>Героев и интервью</dt><dd>2–4</dd></div><div><dt>Съёмка</dt><dd>1–2 смены</dd></div><div><dt>Что входит</dt><dd>Сценарий, интервью, съёмка, монтаж, цвет, звук</dd></div><div><dt>Срок</dt><dd>от 3 недель</dd></div></dl><p class="price">от 150 000 ₽</p><a class="btn btn-pkg" href="#zayavka">Рассчитать смету</a></article><article class="pkg pkg-hl"><span class="badge">РЕКОМЕНДУЕМ</span><h3>Юбилейный фильм</h3><dl><div><dt>Хронометраж</dt><dd>15–30 мин</dd></div><div><dt>Героев и интервью</dt><dd>5–10</dd></div><div><dt>Съёмка</dt><dd>3–5 смен</dd></div><div><dt>Что входит</dt><dd>+ ресёрч, работа с архивом, диктор, графика, титры</dd></div><div><dt>Срок</dt><dd>от 6–8 недель</dd></div></dl><p class="price">от 250 000 ₽</p><a class="btn btn-pkg" href="#zayavka">Рассчитать смету</a></article><article class="pkg"><h3>Полный метр</h3><dl><div><dt>Хронометраж</dt><dd>от 52 мин</dd></div><div><dt>Героев и интервью</dt><dd>по сценарию</dd></div><div><dt>Съёмка</dt><dd>по плану производства</dd></div><div><dt>Что входит</dt><dd>+ экспедиции, реконструкции, музыка на заказ — по проекту</dd></div><div><dt>Срок</dt><dd>от 3 месяцев</dd></div></dl><p class="price">индивидуально</p><a class="btn btn-pkg" href="#zayavka">Рассчитать смету</a></article></div>
 <dl class="terms"><div><dt>Оплата</dt><dd>50% предоплата, 50% — после утверждения финальной версии</dd></div><div><dt>Правки</dt><dd>два раунда входят в стоимость</dd></div><div><dt>Права</dt><dd>исключительные права переходят вам после полной оплаты</dd></div><div><dt>Документы</dt><dd>договор, акты, счета; работаем с юрлицами и по тендерам</dd></div><div><dt>Скидки</dt><dd>на серийные проекты и работу от двух месяцев</dd></div></dl>
+<SlotMachine />
 </div>
 </section>
 <section id="etapy" class="sec" data-fader="Этапы">

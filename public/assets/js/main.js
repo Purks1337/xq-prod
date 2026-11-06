@@ -103,8 +103,8 @@
     let gl = null;
     try { gl = glc.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true, preserveDrawingBuffer: true }); } catch (err) { gl = null; }
     if (!gl) { this.bust = { off: true }; return; }
-    const VS = 'attribute vec3 aP;attribute vec2 aT;attribute vec3 aN;uniform mat4 uM;uniform mat4 uVP;varying vec2 vT;varying vec3 vN;void main(){vT=aT;vN=mat3(uM)*aN;gl_Position=uVP*uM*vec4(aP,1.0);}';
-    const FS = 'precision mediump float;uniform sampler2D uTex;varying vec2 vT;varying vec3 vN;void main(){vec3 n=normalize(vN);vec3 L=normalize(vec3(-0.35,0.45,0.85));float d=max(dot(n,L),0.0);vec3 b=texture2D(uTex,vT).rgb;vec3 c=b*(0.62+0.5*d);float rim=pow(1.0-max(n.z,0.0),3.0);c+=vec3(0.2,0.34,0.96)*rim*0.55;gl_FragColor=vec4(c,1.0);}';
+    const VS = 'attribute vec3 aP;attribute vec2 aT;attribute vec3 aN;uniform mat4 uM;uniform mat4 uVP;varying vec2 vT;varying vec3 vN;varying float vNormY;void main(){vT=aT;vN=mat3(uM)*aN;vec4 p=uVP*uM*vec4(aP,1.0);vNormY=(p.y/p.w)*0.5+0.5;gl_Position=p;}';
+    const FS = 'precision mediump float;uniform sampler2D uTex;varying vec2 vT;varying vec3 vN;varying float vNormY;void main(){vec3 n=normalize(vN);vec3 L=normalize(vec3(-0.35,0.45,0.85));float d=max(dot(n,L),0.0);vec3 b=texture2D(uTex,vT).rgb;vec3 c=b*(0.62+0.5*d);float rim=pow(1.0-max(n.z,0.0),3.0);c+=vec3(0.2,0.34,0.96)*rim*0.55;float a=clamp((vNormY-0.25)/0.15,0.0,1.0);gl_FragColor=vec4(c*a,a);}';
     const sh = (type, src) => { const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; };
     const p = gl.createProgram();
     gl.attachShader(p, sh(gl.VERTEX_SHADER, VS));
@@ -113,6 +113,9 @@
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) { this.bust = { off: true }; return; }
     gl.useProgram(p);
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    gl.getExtension('OES_element_index_uint');
     const B = {
       off: false, gl: gl, glc: glc, w: glc.width, h: glc.height, models: {},
       aP: gl.getAttribLocation(p, 'aP'), aT: gl.getAttribLocation(p, 'aT'), aN: gl.getAttribLocation(p, 'aN'),
@@ -139,9 +142,11 @@
       if (this.bust !== B || B.off) return;
       const data = res[0], img = res[1], gl = B.gl;
       const buf = (arr, tgt) => { const o = gl.createBuffer(); gl.bindBuffer(tgt, o); gl.bufferData(tgt, arr, gl.STATIC_DRAW); return o; };
-      const idx = b64(data.idx, Uint16Array);
+      const isU32 = !!data.idx32 || (data.n > 65535);
+      const idx = b64(data.idx, isU32 ? Uint32Array : Uint16Array);
       const m = {
         c: data.c, r: data.r, count: idx.length,
+        idxType: isU32 ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT,
         pos: buf(b64(data.pos, Int16Array), gl.ARRAY_BUFFER),
         uv: buf(b64(data.uv, Uint16Array), gl.ARRAY_BUFFER),
         nor: buf(b64(data.nor, Int8Array), gl.ARRAY_BUFFER),
@@ -183,7 +188,7 @@
     gl.bindBuffer(gl.ARRAY_BUFFER, m.nor); gl.enableVertexAttribArray(B.aN); gl.vertexAttribPointer(B.aN, 3, gl.BYTE, true, 0, 0);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, m.idx);
     gl.bindTexture(gl.TEXTURE_2D, m.tex);
-    gl.drawElements(gl.TRIANGLES, m.count, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, m.count, m.idxType || gl.UNSIGNED_SHORT, 0);
   }
   bustStart() {
     const B = this.bust;
