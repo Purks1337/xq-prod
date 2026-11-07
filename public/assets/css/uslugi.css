@@ -1,5 +1,4 @@
-/* Хвалите Media — стили страниц услуг. Собрано из source/0N-*.dc.html (node source/build.mjs). */
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:#1B1B1B}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @keyframes ltr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 @keyframes rtl{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -86,7 +85,7 @@ html{scroll-behavior:smooth}
 body{margin:0;background:#1B1B1B}
 .sp a{color:inherit}
 .sp main a:not(.btn):not(.rcard):not(.phone):not(.st-main):not(.st-tel){text-decoration-thickness:2px;text-underline-offset:3px}
-.sp .wrap{max-width:1280px;margin:0 auto;padding:0 clamp(16px,4vw,48px);box-sizing:border-box}
+.sp .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(16px,4vw,48px);box-sizing:border-box}
 .sp mark.ph{background:#F9EEDA;color:#7A5200;padding:1px 4px;font-family:'JetBrains Mono',monospace;font-size:.85em;font-weight:700;border-radius:2px}
 .sp h1,.sp h2,.sp h3{text-wrap:balance}
 .sp [hidden]{display:none !important}

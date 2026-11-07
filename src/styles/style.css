@@ -1,5 +1,4 @@
-/* Хвалите Media — стили. Собрано из source/Main.dc.html (node source/build.mjs). */
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:#1B1B1B}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:#1B1B1B}
 a{color:#3358F4}a:hover{color:#10142E}
