@@ -21,3 +21,5 @@ npm-debug.log*
 # references / original archive
 /hvalite-media-site
 .agents/
+
+tools/
