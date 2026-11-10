@@ -199,7 +199,7 @@ const taskbarItems = [
 
   <!-- Модальное окно свойств кейса с плеером Kinescope -->
   <span data-if="showCase" style="display: none">
-    <div style="position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: clamp(12px, 3vh, 24px); background: rgba(16, 20, 46, 0.72); overflow-y: auto">
+    <div style="position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; padding: clamp(16px, 3.5vh, 32px) 16px; background: rgba(16, 20, 46, 0.76); overflow-y: auto">
       <div role="dialog" aria-modal="true" aria-label="Свойства кейса" data-b-aria-label="dlg.title" style="width: min(100%, 720px); max-height: calc(100vh - 36px); margin: auto; display: flex; flex-direction: column; background: #C3C3C3; padding: 4px; color: #1B1B1B; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 12px 12px 0 #10142E; box-sizing: border-box">
         <div style="flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 8px; background: linear-gradient(90deg, #10142E, #3358F4); color: #FFFFFF">
           <span style="flex: 1 1 auto; min-width: 0; font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Свойства: <span data-b-text="dlg.title">Яндекс Плюс × матч сборной России</span></span>
