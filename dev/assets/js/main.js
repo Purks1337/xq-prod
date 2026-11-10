@@ -476,12 +476,17 @@
       { name: 'Ростелеком', img: BASE + 'assets/img/logos/rostelekom.svg' },
       { name: 'Changan', img: BASE + 'assets/img/logos/changan.svg' },
       { name: 'МХЛ', img: BASE + 'assets/img/logos/jhl.svg' },
-      { name: 'Netflix', img: BASE + 'assets/img/logos/netflix.svg' }
+      { name: 'Netflix', img: BASE + 'assets/img/logos/netflix.svg' },
+      { name: '100+ TechnoBuild', img: BASE + 'assets/img/logos/100plus.svg' },
+      { name: 'FIDE', img: BASE + 'assets/img/logos/fide.svg' },
+      { name: 'Speedsoft', img: BASE + 'assets/img/logos/speedsoft.svg' },
+      { name: 'Ural Motorsport', img: BASE + 'assets/img/logos/uralmotorsport.svg' },
+      { name: 'Ural Music Night', img: BASE + 'assets/img/logos/uralmusicnight.svg' }
     ];
     const logos = [];
     for (let r = 0; r < 2; r++) L.forEach((l) => logos.push({
       name: l.name, img: l.img || '', hasImg: !!l.img, noImg: !l.img,
-      hasCase: !!l.c, nda: !l.c, ah: r === 0 ? 'false' : 'true', tab: r === 0 ? '0' : '-1'
+      hasCase: false, nda: false, ah: r === 0 ? 'false' : 'true', tab: r === 0 ? '0' : '-1'
     }));
 
     const ST = [
