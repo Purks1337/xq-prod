@@ -10,7 +10,8 @@ interface Client {
   hasCase?: boolean;
 }
 
-const SCALE = 0.32;
+const SCALE_MOBILE = 0.32;
+const SCALE_DESKTOP = 0.48;
 
 const clientsList: Client[] = [
   { name: 'КАМАЗ', img: getAssetUrl('/assets/img/logos/kamaz.svg'), width: 130, height: 180 },
@@ -43,7 +44,7 @@ const clientsList: Client[] = [
 ---
 
 <section id="klienty" style="background: #E4E3DE; color: #1B1B1B; padding: 88px 0 80px">
-  <div style="max-width: 1080px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; margin-bottom: 36px">
+  <div class="clients-head" style="max-width: 1080px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 40px; margin-bottom: 36px">
     <div style="display: flex; flex-direction: column; gap: 14px">
       <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: #5E5D58">04 · КЛИЕНТЫ</span>
       <h2 style="margin: 0; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: clamp(36px, 5vw, 68px); line-height: 1">С КЕМ РАБОТАЛИ</h2>
@@ -51,28 +52,34 @@ const clientsList: Client[] = [
     <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 1.5">Компании и бренды, с которыми мы работаем. Наведите курсор на самый край ленты — она поедет быстрее.</p>
   </div>
 
-  <div class="mq" data-on-mousemove="mqMove" data-on-mouseleave="mqLeave" style="overflow: hidden; padding: 10px 0 18px">
-    <div class="mq-ltr" data-ref="setTrack" style="display: flex; width: max-content; gap: 40px; padding-left: 20px; align-items: center">
+  <div class="mq clients-mq" data-on-mousemove="mqMove" data-on-mouseleave="mqLeave">
+    <div class="mq-ltr clients-track" data-ref="setTrack">
       <!-- Первый круг логотипов -->
       {clientsList.map((client) => {
-        const w = Math.round(client.width * SCALE);
-        const h = Math.round(client.height * SCALE);
+        const wMob = Math.round(client.width * SCALE_MOBILE);
+        const hMob = Math.round(client.height * SCALE_MOBILE);
+        const wDesk = Math.round(client.width * SCALE_DESKTOP);
+        const hDesk = Math.round(client.height * SCALE_DESKTOP);
         return (
-          <div aria-hidden="false" style="position: relative; flex: 0 0 auto; height: 80px; min-width: 140px; box-sizing: border-box; padding: 10px 16px; display: flex; align-items: center; justify-content: center">
+          <div
+            aria-hidden="false"
+            class="client-item"
+            style={`--w-mob: ${wMob}px; --h-mob: ${hMob}px; --w-desk: ${wDesk}px; --h-desk: ${hDesk}px;`}
+          >
             {client.img ? (
               <img
                 src={client.img}
                 alt={client.name}
-                width={w}
-                height={h}
+                width={wDesk}
+                height={hDesk}
                 loading="lazy"
                 decoding="async"
-                style={`display: block; width: ${w}px; height: ${h}px; max-height: 64px; max-width: none; object-fit: contain;`}
+                class="client-logo-img"
               />
             ) : (
-              <span style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
-                <span style="font-weight: 800; font-size: 20px; line-height: 1.1; letter-spacing: -0.01em">{client.name}</span>
-                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5E5D58">ЖДЁТ ФАЙЛ ЛОГОТИПА</span>
+              <span class="client-fallback">
+                <span class="client-fallback-name">{client.name}</span>
+                <span class="client-fallback-sub">ЖДЁТ ФАЙЛ ЛОГОТИПА</span>
               </span>
             )}
           </div>
@@ -81,24 +88,30 @@ const clientsList: Client[] = [
 
       <!-- Второй круг логотипов (для бесконечной анимации) -->
       {clientsList.map((client) => {
-        const w = Math.round(client.width * SCALE);
-        const h = Math.round(client.height * SCALE);
+        const wMob = Math.round(client.width * SCALE_MOBILE);
+        const hMob = Math.round(client.height * SCALE_MOBILE);
+        const wDesk = Math.round(client.width * SCALE_DESKTOP);
+        const hDesk = Math.round(client.height * SCALE_DESKTOP);
         return (
-          <div aria-hidden="true" style="position: relative; flex: 0 0 auto; height: 80px; min-width: 140px; box-sizing: border-box; padding: 10px 16px; display: flex; align-items: center; justify-content: center">
+          <div
+            aria-hidden="true"
+            class="client-item"
+            style={`--w-mob: ${wMob}px; --h-mob: ${hMob}px; --w-desk: ${wDesk}px; --h-desk: ${hDesk}px;`}
+          >
             {client.img ? (
               <img
                 src={client.img}
                 alt={client.name}
-                width={w}
-                height={h}
+                width={wDesk}
+                height={hDesk}
                 loading="lazy"
                 decoding="async"
-                style={`display: block; width: ${w}px; height: ${h}px; max-height: 64px; max-width: none; object-fit: contain;`}
+                class="client-logo-img"
               />
             ) : (
-              <span style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
-                <span style="font-weight: 800; font-size: 20px; line-height: 1.1; letter-spacing: -0.01em">{client.name}</span>
-                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5E5D58">ЖДЁТ ФАЙЛ ЛОГОТИПА</span>
+              <span class="client-fallback">
+                <span class="client-fallback-name">{client.name}</span>
+                <span class="client-fallback-sub">ЖДЁТ ФАЙЛ ЛОГОТИПА</span>
               </span>
             )}
           </div>
@@ -107,3 +120,110 @@ const clientsList: Client[] = [
     </div>
   </div>
 </section>
+
+<style>
+  .clients-mq {
+    overflow: hidden;
+    padding: 10px 0 18px;
+  }
+
+  .clients-track {
+    display: flex;
+    width: max-content;
+    gap: 16px;
+    padding-left: 16px;
+    align-items: center;
+  }
+
+  .client-item {
+    position: relative;
+    flex: 0 0 auto;
+    height: 80px;
+    min-width: 120px;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .client-logo-img {
+    display: block;
+    width: var(--w-mob);
+    height: var(--h-mob);
+    max-height: 60px;
+    max-width: none;
+    object-fit: contain;
+  }
+
+  .client-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .client-fallback-name {
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .client-fallback-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #5E5D58;
+  }
+
+  /* ПК версия: увеличенный контейнер и логотипы с аккуратным расстоянием */
+  @media (min-width: 768px) {
+    .clients-head {
+      margin-bottom: 40px !important;
+    }
+
+    .clients-mq {
+      padding: 20px 0 28px;
+    }
+
+    .clients-track {
+      gap: 24px;
+      padding-left: 20px;
+    }
+
+    .client-item {
+      height: 124px;
+      min-width: 160px;
+      padding: 16px 20px;
+    }
+
+    .client-logo-img {
+      width: var(--w-desk);
+      height: var(--h-desk);
+      max-height: 84px;
+    }
+
+    .client-fallback-name {
+      font-size: 22px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .clients-track {
+      gap: 28px;
+    }
+
+    .client-item {
+      height: 130px;
+      min-width: 170px;
+      padding: 16px 24px;
+    }
+
+    .client-logo-img {
+      max-height: 88px;
+    }
+  }
+</style>
