@@ -126,3 +126,6 @@ a{color:#3358F4}a:hover{color:#10142E}
 .chyron{animation:rtl 26s linear infinite}
 @media (prefers-reduced-motion:reduce){.svc,.svc *,.svc *::after{animation:none !important;transition:none !important}}
 @media (prefers-reduced-motion:reduce){.mq-ltr,.mq-rtl,.bob,.blink,.bust,.casewin:hover .scr,.casewin:hover .prog,.casewin:hover .scanline{animation:none}.token,.member,.member .panel,.casewin,.casewin .poster{transition:none}}
+.case-taskbar-scroll::-webkit-scrollbar{height:6px}
+.case-taskbar-scroll::-webkit-scrollbar-track{background:#C3C3C3;box-shadow:inset 1px 1px 0 #7B7B7B}
+.case-taskbar-scroll::-webkit-scrollbar-thumb{background:#7B7B7B;box-shadow:inset -1px -1px 0 #0A0A0A,inset 1px 1px 0 #FFFFFF}

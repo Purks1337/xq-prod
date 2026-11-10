@@ -33,7 +33,12 @@ const clientsList: Client[] = [
   { name: 'Ростелеком', img: getAssetUrl('/assets/img/logos/rostelekom.svg'), width: 491, height: 146 },
   { name: 'Changan', img: getAssetUrl('/assets/img/logos/changan.svg'), width: 356, height: 92 },
   { name: 'МХЛ', img: getAssetUrl('/assets/img/logos/jhl.svg'), width: 207, height: 238 },
-  { name: 'Netflix', img: getAssetUrl('/assets/img/logos/netflix.svg'), width: 270, height: 184 }
+  { name: 'Netflix', img: getAssetUrl('/assets/img/logos/netflix.svg'), width: 270, height: 184 },
+  { name: '100+ TechnoBuild', img: getAssetUrl('/assets/img/logos/100plus.svg'), width: 502, height: 106 },
+  { name: 'FIDE', img: getAssetUrl('/assets/img/logos/fide.svg'), width: 274, height: 192 },
+  { name: 'Speedsoft', img: getAssetUrl('/assets/img/logos/speedsoft.svg'), width: 400, height: 132 },
+  { name: 'Ural Motorsport', img: getAssetUrl('/assets/img/logos/uralmotorsport.svg'), width: 358, height: 126 },
+  { name: 'Ural Music Night', img: getAssetUrl('/assets/img/logos/uralmusicnight.svg'), width: 227, height: 177 }
 ];
 ---
 
@@ -43,17 +48,17 @@ const clientsList: Client[] = [
       <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em; color: #5E5D58">04 · КЛИЕНТЫ</span>
       <h2 style="margin: 0; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: clamp(36px, 5vw, 68px); line-height: 1">С КЕМ РАБОТАЛИ</h2>
     </div>
-    <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 1.5">Где есть кейс — жмите и смотрите. Где NDA — работа под соглашением о неразглашении. Наведите курсор на самый край ленты — она поедет быстрее.</p>
+    <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 1.5">Компании и бренды, с которыми мы работаем. Наведите курсор на самый край ленты — она поедет быстрее.</p>
   </div>
 
   <div class="mq" data-on-mousemove="mqMove" data-on-mouseleave="mqLeave" style="overflow: hidden; padding: 10px 0 18px">
-    <div class="mq-ltr" data-ref="setTrack" style="display: flex; width: max-content; gap: 20px; padding-left: 20px">
+    <div class="mq-ltr" data-ref="setTrack" style="display: flex; width: max-content; gap: 40px; padding-left: 20px; align-items: center">
       <!-- Первый круг логотипов -->
       {clientsList.map((client) => {
         const w = Math.round(client.width * SCALE);
         const h = Math.round(client.height * SCALE);
         return (
-          <div aria-hidden="false" style="position: relative; flex: 0 0 auto; height: 124px; min-width: 220px; box-sizing: border-box; padding: 18px 32px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; border: 2px solid #1B1B1B; box-shadow: 6px 6px 0 #1B1B1B">
+          <div aria-hidden="false" style="position: relative; flex: 0 0 auto; height: 80px; min-width: 140px; box-sizing: border-box; padding: 10px 16px; display: flex; align-items: center; justify-content: center">
             {client.img ? (
               <img
                 src={client.img}
@@ -62,19 +67,13 @@ const clientsList: Client[] = [
                 height={h}
                 loading="lazy"
                 decoding="async"
-                style={`display: block; width: ${w}px; height: ${h}px; max-height: 80px; max-width: none; object-fit: contain;`}
+                style={`display: block; width: ${w}px; height: ${h}px; max-height: 64px; max-width: none; object-fit: contain;`}
               />
             ) : (
               <span style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
                 <span style="font-weight: 800; font-size: 20px; line-height: 1.1; letter-spacing: -0.01em">{client.name}</span>
                 <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5E5D58">ЖДЁТ ФАЙЛ ЛОГОТИПА</span>
               </span>
-            )}
-
-            {client.hasCase ? (
-              <a href="#kejsy" tabindex="0" style="position: absolute; right: -2px; top: -2px; padding: 5px 9px; background: #3358F4; color: #FFFFFF; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.08em">КЕЙС ↗</a>
-            ) : (
-              <span style="position: absolute; right: 10px; top: 10px; padding: 2px 8px; border: 2px solid #1B1B1B; transform: rotate(-8deg); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.12em">NDA</span>
             )}
           </div>
         );
@@ -85,7 +84,7 @@ const clientsList: Client[] = [
         const w = Math.round(client.width * SCALE);
         const h = Math.round(client.height * SCALE);
         return (
-          <div aria-hidden="true" style="position: relative; flex: 0 0 auto; height: 124px; min-width: 220px; box-sizing: border-box; padding: 18px 32px; display: flex; align-items: center; justify-content: center; background: #FFFFFF; border: 2px solid #1B1B1B; box-shadow: 6px 6px 0 #1B1B1B">
+          <div aria-hidden="true" style="position: relative; flex: 0 0 auto; height: 80px; min-width: 140px; box-sizing: border-box; padding: 10px 16px; display: flex; align-items: center; justify-content: center">
             {client.img ? (
               <img
                 src={client.img}
@@ -94,19 +93,13 @@ const clientsList: Client[] = [
                 height={h}
                 loading="lazy"
                 decoding="async"
-                style={`display: block; width: ${w}px; height: ${h}px; max-height: 80px; max-width: none; object-fit: contain;`}
+                style={`display: block; width: ${w}px; height: ${h}px; max-height: 64px; max-width: none; object-fit: contain;`}
               />
             ) : (
               <span style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
                 <span style="font-weight: 800; font-size: 20px; line-height: 1.1; letter-spacing: -0.01em">{client.name}</span>
                 <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #5E5D58">ЖДЁТ ФАЙЛ ЛОГОТИПА</span>
               </span>
-            )}
-
-            {client.hasCase ? (
-              <a href="#kejsy" tabindex="-1" style="position: absolute; right: -2px; top: -2px; padding: 5px 9px; background: #3358F4; color: #FFFFFF; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.08em">КЕЙС ↗</a>
-            ) : (
-              <span style="position: absolute; right: 10px; top: 10px; padding: 2px 8px; border: 2px solid #1B1B1B; transform: rotate(-8deg); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.12em">NDA</span>
             )}
           </div>
         );

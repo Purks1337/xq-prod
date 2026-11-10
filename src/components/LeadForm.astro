@@ -1,5 +1,6 @@
 ---
 // LeadForm.astro
+import { getAssetUrl } from '../utils/paths';
 ---
 
 <section id="zayavka" style="background: #3358F4; color: #FFFFFF; padding: 96px 0">
@@ -61,9 +62,9 @@
           <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em">О ЗАДАЧЕ</span>
           <textarea name="about" rows="4" style="padding: 12px 14px; border: 2px solid #1B1B1B; font-family: inherit; font-size: 16px; resize: vertical"></textarea>
         </label>
-        <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.45; color: #3A3A3A">
-          <input type="checkbox" name="agree" required style="width: 20px; height: 20px; margin: 0; flex: 0 0 auto" />
-          Согласен на обработку персональных данных
+        <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.45; color: #3A3A3A; cursor: pointer">
+          <input type="checkbox" name="agree" required checked style="width: 20px; height: 20px; margin: 0; flex: 0 0 auto; cursor: pointer" />
+          <span>Согласен на <a href={getAssetUrl('/privacy/#consent')} target="_blank" rel="noopener noreferrer" style="color: #1B1B1B; text-decoration: underline">обработку персональных данных</a> и с <a href={getAssetUrl('/privacy/')} target="_blank" rel="noopener noreferrer" style="color: #1B1B1B; text-decoration: underline">политикой конфиденциальности</a></span>
         </label>
         <button type="button" data-on-click="send" style="min-height: 56px; border: 0; background: #1B1B1B; color: #FFFFFF; font-family: inherit; font-weight: 800; font-size: 17px; cursor: pointer">
           Отправить заявку

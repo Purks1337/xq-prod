@@ -65,6 +65,38 @@ const baseUrl = import.meta.env.BASE_URL;
       <slot />
     </div>
 
+    <!-- Cookie Notice Banner -->
+    <div id="cookie-banner" style="display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; max-width: 520px; margin: 0 auto; z-index: 9999; background: #C3C3C3; padding: 4px; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 8px 8px 0 #10142E; color: #1B1B1B">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 6px; background: linear-gradient(90deg, #10142E, #3358F4); color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700">
+        <span>🍪 ФАЙЛЫ COOKIE</span>
+        <button id="cookie-close-btn" aria-label="Закрыть" style="width: 20px; height: 18px; border: 0; background: #C3C3C3; color: #1B1B1B; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF">×</button>
+      </div>
+      <div style="padding: 12px 12px 10px; display: flex; flex-direction: column; gap: 10px; font-size: 13px; line-height: 1.45">
+        <span>Мы используем cookie, чтобы сайт и видеоплееры работали стабильно и быстро. Подробнее — в <a href={getAssetUrl('/privacy/#cookies')} style="color: #3358F4; font-weight: 700; text-decoration: underline">политике cookie</a>.</span>
+        <button id="cookie-accept-btn" style="align-self: flex-end; padding: 6px 18px; border: 0; background: #1B1B1B; color: #FFFFFF; font-family: inherit; font-weight: 800; font-size: 13px; cursor: pointer; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF">
+          Понятно
+        </button>
+      </div>
+    </div>
+    <script is:inline>
+      (function() {
+        try {
+          if (!localStorage.getItem('hvalite_cookie_ack')) {
+            var b = document.getElementById('cookie-banner');
+            if (b) b.style.display = 'block';
+            var accept = function() {
+              localStorage.setItem('hvalite_cookie_ack', '1');
+              if (b) b.style.display = 'none';
+            };
+            var btn = document.getElementById('cookie-accept-btn');
+            if (btn) btn.onclick = accept;
+            var cBtn = document.getElementById('cookie-close-btn');
+            if (cBtn) cBtn.onclick = accept;
+          }
+        } catch(e) {}
+      })();
+    </script>
+
     <!-- Client interactive script -->
     <script is:inline src={mainJsUrl} defer></script>
   </body>

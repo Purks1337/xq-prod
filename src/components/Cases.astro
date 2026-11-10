@@ -87,7 +87,7 @@ const taskbarItems = [
     </div>
 
     <!-- Главный кейс (Яндекс Плюс) -->
-    <div class="casewin" style="background: #C3C3C3; padding: 4px; color: #1B1B1B; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 10px 10px 0 #10142E">
+    <div class="casewin" data-on-click="openFeatured" role="button" tabindex="0" style="background: #C3C3C3; padding: 4px; color: #1B1B1B; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 10px 10px 0 #10142E; cursor: pointer">
       <div class="tb" style="display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 8px; background: linear-gradient(90deg, #7B7B7B, #B5B5B5); color: #FFFFFF">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
           <rect x="1" y="3" width="14" height="10" fill="#E4E3DE"></rect>
@@ -129,7 +129,7 @@ const taskbarItems = [
     <!-- Сетка кейсов -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 28px; margin-top: 32px">
       {casesList.map((c) => (
-        <div class="casewin" style="background: #C3C3C3; padding: 4px; color: #1B1B1B; display: flex; flex-direction: column; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 8px 8px 0 #10142E; min-width: 0">
+        <div class="casewin" data-on-click={`grid.${c.num}.open`} role="button" tabindex="0" style="background: #C3C3C3; padding: 4px; color: #1B1B1B; display: flex; flex-direction: column; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 8px 8px 0 #10142E; min-width: 0; cursor: pointer">
           <div class="tb" style="display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 8px; background: linear-gradient(90deg, #7B7B7B, #B5B5B5); color: #FFFFFF">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
               <rect x="1" y="3" width="14" height="10" fill="#E4E3DE"></rect>
@@ -180,7 +180,7 @@ const taskbarItems = [
         Пуск
       </a>
       <span aria-hidden="true" style="width: 2px; height: 34px; margin: 0 4px; box-shadow: inset 1px 0 0 #7B7B7B, inset -1px 0 0 #FFFFFF; flex: 0 0 auto"></span>
-      <div style="display: flex; gap: 4px; flex: 1 1 auto; min-width: 0; overflow-x: auto">
+      <div class="case-taskbar-scroll" style="display: flex; gap: 4px; flex: 1 1 auto; min-width: 0; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; scrollbar-color: #7B7B7B #C3C3C3">
         {taskbarItems.map((item) => (
           <button
             data-on-click={`tasks.${item.index}.open`}
@@ -199,15 +199,15 @@ const taskbarItems = [
 
   <!-- Модальное окно свойств кейса с плеером Kinescope -->
   <span data-if="showCase" style="display: none">
-    <div style="position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(16, 20, 46, 0.72)">
-      <div role="dialog" aria-modal="true" aria-label="Свойства кейса" data-b-aria-label="dlg.title" style="width: min(100%, 720px); max-height: calc(100vh - 32px); overflow: auto; background: #C3C3C3; padding: 4px; color: #1B1B1B; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 12px 12px 0 #10142E">
-        <div style="display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 8px; background: linear-gradient(90deg, #10142E, #3358F4); color: #FFFFFF">
+    <div style="position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: clamp(12px, 3vh, 24px); background: rgba(16, 20, 46, 0.72); overflow-y: auto">
+      <div role="dialog" aria-modal="true" aria-label="Свойства кейса" data-b-aria-label="dlg.title" style="width: min(100%, 720px); max-height: calc(100vh - 36px); margin: auto; display: flex; flex-direction: column; background: #C3C3C3; padding: 4px; color: #1B1B1B; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF, 12px 12px 0 #10142E; box-sizing: border-box">
+        <div style="flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 4px 4px 4px 8px; background: linear-gradient(90deg, #10142E, #3358F4); color: #FFFFFF">
           <span style="flex: 1 1 auto; min-width: 0; font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Свойства: <span data-b-text="dlg.title">Яндекс Плюс × матч сборной России</span></span>
           <button data-on-click="closeCase" aria-label="Закрыть" style="display: flex; align-items: center; justify-content: center; width: 28px; height: 24px; border: 0; padding: 0; background: #C3C3C3; color: #1B1B1B; font-family: inherit; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF">×</button>
         </div>
-        <div style="padding: 16px 14px 14px; display: flex; flex-direction: column; gap: 16px">
+        <div style="padding: 16px 14px 28px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; flex: 1 1 auto; scrollbar-width: thin; scrollbar-color: #7B7B7B #C3C3C3">
           <!-- Видеоплеер Kinescope в модальном окне -->
-          <div style="position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #10142E; box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #FFFFFF">
+          <div style="position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #10142E; box-shadow: inset 1px 1px 0 #7B7B7B, inset -1px -1px 0 #FFFFFF; flex: 0 0 auto">
             <iframe
               data-b-src="dlg.embedUrl"
               src=""
@@ -237,7 +237,7 @@ const taskbarItems = [
             <span style="position: absolute; top: -10px; left: 10px; padding: 0 5px; background: #C3C3C3; font-weight: 700; font-size: 13px">Результат</span>
             <p style="margin: 0; font-size: 15px; line-height: 1.5"><span data-b-text="dlg.res">Эфир прошёл без единого сбоя.</span></p>
           </div>
-          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-top: 4px; padding-bottom: 8px">
             <a data-b-href="dlg.kinescopeUrl" href="https://kinescope.io" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; background: #C3C3C3; color: #1B1B1B; text-decoration: none; font-weight: 800; font-size: 13px; box-shadow: inset -1px -1px 0 #0A0A0A, inset 1px 1px 0 #FFFFFF, inset -2px -2px 0 #7B7B7B, inset 2px 2px 0 #DFDFDF">
               <svg aria-hidden="true" width="10" height="10" viewBox="0 0 10 10"><polygon points="1,0 10,5 1,10" fill="#1B1B1B"></polygon></svg>
               Смотреть в Kinescope ↗

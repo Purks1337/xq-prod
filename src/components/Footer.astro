@@ -66,8 +66,11 @@ const servicesFooter = [
     </div>
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; padding-top: 24px; border-top: 1px solid #3A3A3A; font-size: 13px; color: #A8A7A2">
       <span>© 2026 Хвалите Media · ИП Аккерман М.Э.</span>
-      <a href="https://quality-media.ru" style="color: #E4E3DE">Студия подкастов Хвалите Quality ↗</a>
-      <a href="#top" style="color: #A8A7A2">Политика конфиденциальности</a>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px">
+        <a href={getAssetUrl('/privacy/')} style="color: #A8A7A2; text-decoration: none">Политика конфиденциальности</a>
+        <a href={getAssetUrl('/privacy/#consent')} style="color: #A8A7A2; text-decoration: none">Согласие на обработку данных</a>
+        <a href={getAssetUrl('/privacy/#cookies')} style="color: #A8A7A2; text-decoration: none">Куки</a>
+      </div>
     </div>
   </div>
 </footer>
