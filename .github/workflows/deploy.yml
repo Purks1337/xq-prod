@@ -38,16 +38,19 @@ jobs:
           USER: ${{ secrets.VPS_USER || 'root' }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          SSH_CMD="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new"
 
           # Sync built dist and package files to VPS
-          rsync -avz --delete dist/ "${USER}@${HOST}:/var/www/hvalite-media/dist/"
-          scp package.json package-lock.json "${USER}@${HOST}:/var/www/hvalite-media/"
+          rsync -avz --delete -e "$SSH_CMD" dist/ "${USER}@${HOST}:/var/www/hvalite-media/dist/"
+          scp -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new package.json package-lock.json "${USER}@${HOST}:/var/www/hvalite-media/"
 
           # Set permissions, install production dependencies, restart service and reload nginx
-          ssh "${USER}@${HOST}" "
+          $SSH_CMD "${USER}@${HOST}" "
             chown -R www-data:www-data /var/www/hvalite-media/dist
             cd /var/www/hvalite-media && npm ci --omit=dev
             systemctl restart hvalite-media
