@@ -55,9 +55,10 @@ const baseUrl = import.meta.env.BASE_URL;
       href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&family=Unbounded:wght@700;800;900&display=swap"
     />
 
-    <!-- Global Base URL for dynamic asset resolution in scripts -->
+    <!-- Global Base URL and API endpoint for dynamic resolution in scripts -->
     <script is:inline define:vars={{ baseUrl }}>
       window.__BASE_URL__ = baseUrl;
+      window.__LEAD_ENDPOINT__ = (baseUrl ? baseUrl.replace(/\/$/, '') : '') + '/api/lead';
     </script>
   </head>
   <body>

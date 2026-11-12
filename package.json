@@ -6,9 +6,11 @@
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "start": "node ./dist/server/entry.mjs",
     "astro": "ASTRO_TELEMETRY_DISABLED=1 astro"
   },
   "dependencies": {
+    "@astrojs/node": "^11.1.12",
     "astro": "^7.4.2"
   }
 }

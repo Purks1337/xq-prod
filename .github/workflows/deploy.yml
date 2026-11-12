@@ -55,11 +55,16 @@ jobs:
           fi
           cd ..
 
+          DIST_DIR="./dist/client"
+          if [ ! -d "$DIST_DIR" ]; then
+            DIST_DIR="./dist"
+          fi
+
           if [ "${{ github.ref_name }}" = "dev" ]; then
             echo "Обновляем тестовую версию в /dev/..."
             rm -rf ./site-deploy/dev
             mkdir -p ./site-deploy/dev
-            cp -r ./dist/* ./site-deploy/dev/
+            cp -r "$DIST_DIR"/* ./site-deploy/dev/
 
             # Если корень ещё пустой, создаём редирект на /dev/
             if [ ! -f "./site-deploy/index.html" ]; then
@@ -71,7 +76,7 @@ jobs:
               mv ./site-deploy/dev /tmp/dev-backup
             fi
             find ./site-deploy -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-            cp -r ./dist/* ./site-deploy/
+            cp -r "$DIST_DIR"/* ./site-deploy/
             if [ -d "/tmp/dev-backup" ]; then
               mv /tmp/dev-backup ./site-deploy/dev
             fi
