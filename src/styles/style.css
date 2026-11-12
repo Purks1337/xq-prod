@@ -1,6 +1,6 @@
-html{scroll-behavior:smooth;background:#1B1B1B}
+html{scroll-behavior:smooth;background:#1B1B1B;overflow-x:hidden}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:#1B1B1B}
+body{margin:0;background:#1B1B1B;overflow-x:hidden}
 a{color:#3358F4}a:hover{color:#10142E}
 @keyframes ltr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 @keyframes rtl{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -129,3 +129,153 @@ a{color:#3358F4}a:hover{color:#10142E}
 .case-taskbar-scroll::-webkit-scrollbar{height:6px}
 .case-taskbar-scroll::-webkit-scrollbar-track{background:#C3C3C3;box-shadow:inset 1px 1px 0 #7B7B7B}
 .case-taskbar-scroll::-webkit-scrollbar-thumb{background:#7B7B7B;box-shadow:inset -1px -1px 0 #0A0A0A,inset 1px 1px 0 #FFFFFF}
+
+/* ==========================================================================
+   Мобильная адаптация (MOBILE_AUDIT.md)
+   ========================================================================== */
+
+/* 1. Hero: заголовок во всю ширину контейнера и центрирование контента на мобильных */
+@media (max-width: 980px) {
+  .hero-title {
+    width: 100% !important;
+    font-size: clamp(38px, 8.5vw, 64px) !important;
+  }
+}
+@media (max-width: 640px) {
+  .hero-container {
+    padding: 48px 16px 56px !important;
+    gap: 32px !important;
+  }
+  .hero-category {
+    text-align: center !important;
+  }
+  .hero-title {
+    width: 100% !important;
+    font-size: clamp(36px, 12vw, 64px) !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .hero-title span {
+    white-space: nowrap;
+  }
+  .hero-desc {
+    text-align: center !important;
+  }
+  .hero-actions {
+    justify-content: center !important;
+  }
+  .hero-city {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+}
+
+/* 2. Cases: скрыть Windows 95 таскбар на мобильных */
+@media (max-width: 640px) {
+  .taskbar-win95 {
+    display: none !important;
+  }
+}
+
+/* 3. Cases: адаптивный аспект для главного кейса */
+@media (max-width: 640px) {
+  .case-featured-poster {
+    aspect-ratio: 16 / 9 !important;
+  }
+  .case-featured-title {
+    font-size: 18px !important;
+  }
+}
+
+/* 4. Team: адаптивная горизонтальная swipe-карусель */
+@media (max-width: 980px) {
+  .team-row {
+    height: auto !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    gap: 12px !important;
+    padding-bottom: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: #7B7B7B #1B1B1B;
+  }
+}
+@media (max-width: 640px) {
+  .member {
+    flex: 0 0 260px !important;
+    height: 360px !important;
+    scroll-snap-align: start;
+  }
+  .member .panel {
+    transform: translateY(0) !important;
+  }
+  .member .vname {
+    opacity: 0 !important;
+  }
+  .member .stage,
+  .member.active .stage {
+    transform: scale(0.85) !important;
+  }
+}
+@media (max-width: 980px) and (min-width: 641px) {
+  .member {
+    flex: 0 0 220px !important;
+    height: 400px !important;
+    scroll-snap-align: start;
+  }
+  .member .panel {
+    transform: translateY(0) !important;
+  }
+  .member .vname {
+    opacity: 0 !important;
+  }
+}
+
+/* 5. Services: компактные карточки и размеры фигур на мобильных */
+@media (max-width: 640px) {
+  .svc {
+    min-height: 320px !important;
+    padding: 20px !important;
+  }
+  .svc .sfig {
+    min-height: 140px !important;
+  }
+  .svc-title {
+    font-size: 22px !important;
+  }
+}
+
+/* 6. Process: уменьшение тени и компактность карточки этапа */
+@media (max-width: 640px) {
+  .process-map-box {
+    box-shadow: 4px 4px 0 #3358F4 !important;
+  }
+  .process-stage-card {
+    padding: 16px !important;
+  }
+  .process-stage-icon {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+/* 7. Footer: 1 колонка на узких экранах */
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 8. LeadForm: адаптивная форма на узких экранах */
+@media (max-width: 480px) {
+  .leadform-container {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+    padding: 0 16px !important;
+  }
+  .leadform-form {
+    padding: 20px !important;
+    box-shadow: 6px 6px 0 #10142E !important;
+  }
+}
+

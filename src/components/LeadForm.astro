@@ -4,7 +4,7 @@ import { getAssetUrl } from '../utils/paths';
 ---
 
 <section id="zayavka" style="background: #3358F4; color: #FFFFFF; padding: 96px 0">
-  <div style="max-width: 1080px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 48px; align-items: start">
+  <div class="leadform-container" style="max-width: 1080px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 48px; align-items: start">
     <div style="display: flex; flex-direction: column; gap: 22px; min-width: 0">
       <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.12em">06 · ЗАЯВКА</span>
       <h2 style="margin: 0; font-family: 'Unbounded', 'Arial Black', sans-serif; font-weight: 900; font-size: clamp(34px, 4.6vw, 62px); line-height: 1.02; display: flex; flex-direction: column">
@@ -25,7 +25,7 @@ import { getAssetUrl } from '../utils/paths';
       </div>
     </div>
 
-    <form aria-label="Заявка на проект" style="display: flex; flex-direction: column; gap: 16px; padding: 28px; background: #FFFFFF; color: #1B1B1B; border: 3px solid #10142E; box-shadow: 12px 12px 0 #10142E; min-width: 0">
+    <form class="leadform-form" aria-label="Заявка на проект" style="display: flex; flex-direction: column; gap: 16px; padding: 28px; background: #FFFFFF; color: #1B1B1B; border: 3px solid #10142E; box-shadow: 12px 12px 0 #10142E; min-width: 0">
       <span data-if="notSent" style="display: contents">
         <label style="display: flex; flex-direction: column; gap: 6px">
           <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em">ИМЯ ИЛИ КОМПАНИЯ</span>
