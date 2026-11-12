@@ -667,6 +667,7 @@
 
   var BOOL = { disabled: 'disabled', checked: 'checked', hidden: 'hidden', selected: 'selected', readonly: 'readOnly', required: 'required' };
   var binds = [];
+  var refs = [];
   function getAnalyticsData() {
     var params = new URLSearchParams(window.location.search);
     var utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid', 'gclid', 'vkclid'];
