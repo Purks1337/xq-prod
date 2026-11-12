@@ -1,110 +1,55 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy to VPS
 
 on:
-  # Запуск при пуше в main или dev
   push:
-    branches: [ main, dev ]
-  # Возможность ручного запуска из вкладки Actions на GitHub
+    branches: [ main ]
   workflow_dispatch:
 
-# Права доступа для сборки, сохранения ветки gh-pages и развертывания GitHub Pages
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-# Предотвращаем конфликты параллельных деплоев
 concurrency:
-  group: "pages"
+  group: "production-deploy"
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build site
+      - name: Build site (hybrid mode)
         run: npm run build
         env:
-          GITHUB_REF_NAME: ${{ github.ref_name }}
+          ASTRO_BASE: '/'
+          ASTRO_SITE: 'https://hvalite-media.ru'
 
-      - name: Prepare Pages directory and sync with gh-pages branch
+      - name: Deploy to VPS via SSH/rsync
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          HOST: ${{ secrets.VPS_HOST || '2.26.10.12' }}
+          USER: ${{ secrets.VPS_USER || 'root' }}
         run: |
-          mkdir -p ./site-deploy
-          cd ./site-deploy
-          git init
-          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          git fetch origin gh-pages:gh-pages 2>/dev/null || true
-          if git rev-parse --verify gh-pages >/dev/null 2>&1; then
-            git checkout gh-pages
-          else
-            git checkout -b gh-pages
-          fi
-          cd ..
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
 
-          DIST_DIR="./dist/client"
-          if [ ! -d "$DIST_DIR" ]; then
-            DIST_DIR="./dist"
-          fi
+          # Sync built dist and package files to VPS
+          rsync -avz --delete dist/ "${USER}@${HOST}:/var/www/hvalite-media/dist/"
+          scp package.json package-lock.json "${USER}@${HOST}:/var/www/hvalite-media/"
 
-          if [ "${{ github.ref_name }}" = "dev" ]; then
-            echo "Обновляем тестовую версию в /dev/..."
-            rm -rf ./site-deploy/dev
-            mkdir -p ./site-deploy/dev
-            cp -r "$DIST_DIR"/* ./site-deploy/dev/
-
-            # Если корень ещё пустой, создаём редирект на /dev/
-            if [ ! -f "./site-deploy/index.html" ]; then
-              echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=./dev/"></head><body>Redirecting to <a href="./dev/">dev</a>...</body></html>' > ./site-deploy/index.html
-            fi
-          else
-            echo "Обновляем боевую версию в корне /..."
-            if [ -d "./site-deploy/dev" ]; then
-              mv ./site-deploy/dev /tmp/dev-backup
-            fi
-            find ./site-deploy -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
-            cp -r "$DIST_DIR"/* ./site-deploy/
-            if [ -d "/tmp/dev-backup" ]; then
-              mv /tmp/dev-backup ./site-deploy/dev
-            fi
-          fi
-
-          touch ./site-deploy/.nojekyll
-
-          cd ./site-deploy
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Deploy ${{ github.ref_name }} to Pages [skip ci]" || echo "Нет новых изменений для коммита в gh-pages"
-          git push origin gh-pages
-          cd ..
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./site-deploy
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
+          # Set permissions, install production dependencies, restart service and reload nginx
+          ssh "${USER}@${HOST}" "
+            chown -R www-data:www-data /var/www/hvalite-media/dist
+            cd /var/www/hvalite-media && npm ci --omit=dev
+            systemctl restart hvalite-media
+            systemctl reload nginx
+          "
