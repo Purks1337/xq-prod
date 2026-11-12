@@ -34,20 +34,25 @@ jobs:
       - name: Deploy to VPS via SSH/rsync
         env:
           SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
-          HOST: ${{ secrets.VPS_HOST || '109.107.161.26' }}
-          USER: ${{ secrets.VPS_USER || 'root' }}
+          HOST: '109.107.161.26'
+          USER: 'root'
         run: |
+          if [ -z "$SSH_KEY" ]; then
+            echo "::error::Секрет VPS_SSH_KEY не задан или пуст в GitHub Secrets!"
+            exit 1
+          fi
+
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
 
-          SSH_CMD="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new"
+          SSH_CMD="ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new -o BatchMode=yes"
 
           # Sync built dist and package files to VPS
           rsync -avz --delete -e "$SSH_CMD" dist/ "${USER}@${HOST}:/var/www/hvalite-media/dist/"
-          scp -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=accept-new package.json package-lock.json "${USER}@${HOST}:/var/www/hvalite-media/"
+          rsync -avz -e "$SSH_CMD" package.json package-lock.json "${USER}@${HOST}:/var/www/hvalite-media/"
 
           # Set permissions, install production dependencies, restart service and reload nginx
           $SSH_CMD "${USER}@${HOST}" "
