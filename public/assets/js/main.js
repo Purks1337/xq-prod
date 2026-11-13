@@ -787,18 +787,82 @@
   function submitLead(e, done) {
     var btn = e.currentTarget;
     var form = btn.form || btn.closest('form');
-    if (form && form.reportValidity && !form.reportValidity()) return;
-    var data = {};
-    if (form) {
-      new FormData(form).forEach(function (v, k) {
-        if (data[k] !== undefined) {
-          if (Array.isArray(data[k])) data[k].push(v);
-          else data[k] = [data[k], v];
-        } else {
-          data[k] = v;
-        }
-      });
+    if (!form) return;
+
+    var nameInput = form.querySelector('input[name="name"]');
+    if (nameInput && !nameInput.value.trim()) {
+      nameInput.setCustomValidity('Пожалуйста, укажите имя или компанию');
+      nameInput.reportValidity();
+      var clearName = function () {
+        nameInput.setCustomValidity('');
+        nameInput.removeEventListener('input', clearName);
+      };
+      nameInput.addEventListener('input', clearName);
+      return;
     }
+
+    var contactInput = form.querySelector('input[name="contact"]');
+    if (contactInput && !contactInput.value.trim()) {
+      contactInput.setCustomValidity('Пожалуйста, укажите телефон или Telegram');
+      contactInput.reportValidity();
+      var clearContact = function () {
+        contactInput.setCustomValidity('');
+        contactInput.removeEventListener('input', clearContact);
+      };
+      contactInput.addEventListener('input', clearContact);
+      return;
+    }
+
+    var chips = form.querySelectorAll('input[name="format"]');
+    if (chips.length > 0) {
+      var anyChecked = Array.prototype.some.call(chips, function (c) { return c.checked; });
+      if (!anyChecked) {
+        var fieldset = form.querySelector('.chips') || chips[0].closest('fieldset');
+        if (fieldset) fieldset.classList.add('has-error');
+        var errEl = form.querySelector('.chips-err');
+        if (errEl) errEl.style.display = 'block';
+        chips[0].setCustomValidity('Пожалуйста, выберите хотя бы один вариант');
+        chips[0].reportValidity();
+        var clearChips = function () {
+          if (Array.prototype.some.call(chips, function (c) { return c.checked; })) {
+            if (fieldset) fieldset.classList.remove('has-error');
+            if (errEl) errEl.style.display = 'none';
+            chips[0].setCustomValidity('');
+            Array.prototype.forEach.call(chips, function (c) {
+              c.removeEventListener('change', clearChips);
+            });
+          }
+        };
+        Array.prototype.forEach.call(chips, function (c) {
+          c.addEventListener('change', clearChips);
+        });
+        return;
+      }
+    }
+
+    var agreeInput = form.querySelector('input[name="agree"]');
+    if (agreeInput && !agreeInput.checked) {
+      agreeInput.setCustomValidity('Необходимо согласие на обработку данных');
+      agreeInput.reportValidity();
+      var clearAgree = function () {
+        agreeInput.setCustomValidity('');
+        agreeInput.removeEventListener('change', clearAgree);
+      };
+      agreeInput.addEventListener('change', clearAgree);
+      return;
+    }
+
+    if (form.reportValidity && !form.reportValidity()) return;
+
+    var data = {};
+    new FormData(form).forEach(function (v, k) {
+      if (data[k] !== undefined) {
+        if (Array.isArray(data[k])) data[k].push(v);
+        else data[k] = [data[k], v];
+      } else {
+        data[k] = v;
+      }
+    });
     data.page = location.href;
     try {
       var analytics = getAnalyticsData();

@@ -415,7 +415,9 @@ body{margin:0;background:#1B1B1B}
 .sp .fld input,.sp .fld select,.sp .fld textarea{width:100%;box-sizing:border-box;border-radius:0}
 .sp .chips{margin:0;padding:0;border:0;display:flex;flex-direction:column;gap:8px;min-width:0}
 .sp .chips legend{margin-bottom:8px;padding:0}
-.sp .chips>div{display:flex;flex-wrap:wrap;gap:8px}
+.sp .chips>div{display:flex;flex-wrap:wrap;gap:8px;transition:all .2s ease}
+.chips.has-error>div,.sp .chips.has-error>div{padding:8px;border:2px solid #E11D48;background:rgba(225,29,72,0.06);box-shadow:0 0 0 2px rgba(225,29,72,0.2)}
+.chips-err,.sp .chips-err{color:#E11D48;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;margin-top:2px}
 .sp .chip{position:relative;cursor:pointer}
 .sp .chip input{position:absolute;opacity:0;width:1px;height:1px}
 .sp .chip span{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:2px solid #1B1B1B;font-size:15px;font-weight:600}

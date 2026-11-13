@@ -74,6 +74,16 @@ export const POST: APIRoute = async ({ request }) => {
   const timeOnSite = typeof body.time_on_site === 'string' ? body.time_on_site.trim() : '';
   const ymUid = typeof body.ym_uid === 'string' ? body.ym_uid.trim() : '';
 
+  if (!name) {
+    return new Response(
+      JSON.stringify({ ok: false, error: 'Пожалуйста, укажите имя или компанию' }),
+      {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
+
   if (!contact) {
     return new Response(
       JSON.stringify({ ok: false, error: 'Пожалуйста, укажите телефон или Telegram' }),
