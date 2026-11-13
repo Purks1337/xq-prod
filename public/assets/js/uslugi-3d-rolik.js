@@ -505,6 +505,38 @@
     if (h.indexOf('tel:') === 0) goal('click_phone');
     else if (/t\.me\/|wa\.me\//.test(h)) goal('click_messenger');
   });
+  // Раскрытие карточек форматов на мобильных устройствах
+  document.addEventListener('click', function (e) {
+    var win = e.target.closest && e.target.closest('.sp .fwin');
+    if (!win) {
+      if (window.innerWidth <= 640) {
+        document.querySelectorAll('.sp .fwin.is-open').forEach(function (el) {
+          el.classList.remove('is-open');
+        });
+        if (document.activeElement && document.activeElement.closest('.sp .fwin')) {
+          document.activeElement.blur();
+        }
+      }
+      return;
+    }
+    if (e.target.closest('a')) return;
+
+    if (window.innerWidth <= 640) {
+      if (win.classList.contains('is-open') && e.target.closest('.fmore')) {
+        return;
+      }
+      var wasOpen = win.classList.contains('is-open');
+      document.querySelectorAll('.sp .fwin.is-open').forEach(function (el) {
+        el.classList.remove('is-open');
+      });
+      if (document.activeElement && document.activeElement.closest('.sp .fwin')) {
+        document.activeElement.blur();
+      }
+      if (!wasOpen) {
+        win.classList.add('is-open');
+      }
+    }
+  });
   // Часы в панели задач кейсов.
   setInterval(update, 30000);
 })();
