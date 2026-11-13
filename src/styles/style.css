@@ -1,6 +1,7 @@
-html{scroll-behavior:smooth;background:#1B1B1B;overflow-x:hidden}
+html{scroll-behavior:smooth;background:#1B1B1B;overflow-x:clip}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:#1B1B1B;overflow-x:hidden}
+body{margin:0;background:#1B1B1B;overflow-x:clip}
+main{overflow-x:hidden;overflow-x:clip}
 a{color:#3358F4}a:hover{color:#10142E}
 @keyframes ltr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 @keyframes rtl{from{transform:translateX(0)}to{transform:translateX(-50%)}}
