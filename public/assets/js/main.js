@@ -43,6 +43,7 @@
     this.heroRaf = 0;
     this.heroLast = 0;
     this.heroTick = this.heroTick.bind(this);
+    window.addEventListener('resize', () => { if (this.heroEl) this.heroPlace(this.heroS); }, { passive: true });
     this.mqRate = 1;
     this.mqTarget = 1;
     this.mqRaf = 0;
@@ -284,12 +285,29 @@
     const t = Math.max(0, Math.min(1, (s - r.cum[k]) / seg));
     return [r.P[k][0] + (r.P[k + 1][0] - r.P[k][0]) * t, r.P[k][1] + (r.P[k + 1][1] - r.P[k][1]) * t];
   }
+  heroCameraTrack(p) {
+    const el = this.heroEl;
+    if (!el) return;
+    const scrollEl = el.closest('.process-map-scroll') || (el.parentElement ? el.parentElement.parentElement : null);
+    if (!scrollEl) return;
+    const mapBox = el.closest('.process-map-box') || el.offsetParent;
+    if (!mapBox) return;
+
+    const maxScroll = scrollEl.scrollWidth - scrollEl.clientWidth;
+    if (maxScroll <= 0) return;
+
+    const boxOffsetLeft = mapBox.offsetLeft || 0;
+    const heroX = boxOffsetLeft + (p[0] / 40) * mapBox.offsetWidth;
+    const targetScroll = heroX - (scrollEl.clientWidth / 2);
+    scrollEl.scrollLeft = Math.max(0, Math.min(maxScroll, Math.round(targetScroll)));
+  }
   heroPlace(s) {
     const el = this.heroEl;
     if (!el) return;
     const p = this.heroPos(s);
     el.style.left = (p[0] / 40 * 100).toFixed(3) + '%';
     el.style.top = (p[1] / 18 * 100).toFixed(3) + '%';
+    this.heroCameraTrack(p);
   }
   heroGo(stage) {
     const r = this.heroRoute();
@@ -649,7 +667,10 @@
       st: st, passed: passed,
       prev: () => { if (stage > 0) { self.setState({ stage: stage - 1 }); self.heroGo(stage - 1); } },
       next: () => { const to = stage >= last ? 0 : stage + 1; self.setState({ stage: to }); self.heroGo(to); },
-      setHero: (el) => { self.heroEl = el; },
+      setHero: (el) => {
+        self.heroEl = el;
+        if (el) requestAnimationFrame(() => self.heroPlace(self.heroS));
+      },
       nextLabel: stage >= last ? 'ЗАНОВО ↺' : 'ДАЛЬШЕ ▶',
       prevDisabled: prevDisabled, prevStyle: prevStyle,
       clock: pad(d.getHours()) + ':' + pad(d.getMinutes()),

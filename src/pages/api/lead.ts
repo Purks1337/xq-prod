@@ -53,6 +53,9 @@ export const POST: APIRoute = async ({ request }) => {
   const service = typeof body.service === 'string' ? body.service.trim() : '';
   const budget = typeof body.budget === 'string' ? body.budget.trim() : '';
   const format = Array.isArray(body.format) ? body.format.join(', ') : (typeof body.format === 'string' ? body.format.trim() : '');
+  const link = typeof body.link === 'string' ? body.link.trim() : '';
+  const date = typeof body.date === 'string' ? body.date.trim() : '';
+  const details = typeof body.details === 'string' ? body.details.trim() : '';
   const about = typeof body.about === 'string' ? body.about.trim() : '';
   const discount = typeof body.discount === 'string' ? body.discount.trim() : '';
   const page = typeof body.page === 'string' ? body.page.trim() : (request.headers.get('referer') || '');
@@ -105,7 +108,16 @@ export const POST: APIRoute = async ({ request }) => {
     lines.push(`💰 <b>Бюджет:</b> ${escapeHtml(budget)}`);
   }
   if (format) {
-    lines.push(`📌 <b>Где покажут:</b> ${escapeHtml(format)}`);
+    lines.push(`📌 <b>Формат / Где покажут:</b> ${escapeHtml(format)}`);
+  }
+  if (date) {
+    lines.push(`📅 <b>Дата премьеры:</b> ${escapeHtml(date)}`);
+  }
+  if (details) {
+    lines.push(`📍 <b>Детали / Площадка:</b> ${escapeHtml(details)}`);
+  }
+  if (link) {
+    lines.push(`🔗 <b>ТЗ / CAD / Ссылка:</b> ${escapeHtml(link)}`);
   }
   if (discount) {
     lines.push(`🎁 <b>Скидка / Промокод:</b> ${escapeHtml(discount)}`);

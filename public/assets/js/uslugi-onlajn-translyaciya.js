@@ -14,8 +14,8 @@
   // ===== НАСТРОЙКА =====
   // Куда отправлять заявки: адрес, принимающий POST с JSON
   // { name, contact, service, budget, agree, page } + на разных страницах about, format, link, date, details.
-  // Пока пусто — заявка НИКУДА не уходит (посетитель увидит «Готово», в консоли будет предупреждение).
-  var LEAD_ENDPOINT = '';
+  var LEAD_ENDPOINT = (typeof window !== 'undefined' && window.__LEAD_ENDPOINT__) || (typeof window !== 'undefined' && window.__BASE_URL__ ? window.__BASE_URL__.replace(/\/$/, '') + '/api/lead' : '/api/lead');
+  var BASE = (typeof window !== 'undefined' && window.__BASE_URL__) ? window.__BASE_URL__.replace(/\/$/, '') + '/' : '';
   // Номер счётчика Яндекс Метрики (код счётчика вставляется в <head>). 0 — цели не отправляются.
   // Цели: lead_form — заявка отправлена, click_phone — клик по телефону, click_messenger — Telegram/WhatsApp.
   var METRIKA_ID = 0;
@@ -398,24 +398,119 @@
   var binds = [];
   var refs = [];
 
+  function getAnalyticsData() {
+    var params = new URLSearchParams(window.location.search);
+    var utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'yclid', 'gclid', 'vkclid'];
+    var storedUtm = {};
+    try {
+      storedUtm = JSON.parse(sessionStorage.getItem('xq_utm') || '{}');
+    } catch (e) {}
+
+    var hasNewUtm = false;
+    utmKeys.forEach(function (k) {
+      var val = params.get(k);
+      if (val) {
+        storedUtm[k] = val;
+        hasNewUtm = true;
+      }
+    });
+    if (hasNewUtm) {
+      try { sessionStorage.setItem('xq_utm', JSON.stringify(storedUtm)); } catch (e) {}
+    }
+
+    var landingPage = '';
+    var referrer = '';
+    try {
+      landingPage = sessionStorage.getItem('xq_landing') || window.location.href;
+      if (!sessionStorage.getItem('xq_landing')) {
+        sessionStorage.setItem('xq_landing', landingPage);
+      }
+      referrer = sessionStorage.getItem('xq_referrer') || document.referrer || '';
+      if (!sessionStorage.getItem('xq_referrer') && document.referrer) {
+        sessionStorage.setItem('xq_referrer', referrer);
+      }
+    } catch (e) {}
+
+    var sessionStart = Date.now();
+    try {
+      var storedStart = sessionStorage.getItem('xq_session_start');
+      if (storedStart) {
+        sessionStart = Number(storedStart);
+      } else {
+        sessionStorage.setItem('xq_session_start', String(sessionStart));
+      }
+    } catch (e) {}
+    var secondsOnSite = Math.max(0, Math.round((Date.now() - sessionStart) / 1000));
+    var timeOnSite = secondsOnSite < 60 ? (secondsOnSite + ' сек.') : (Math.floor(secondsOnSite / 60) + ' мин. ' + (secondsOnSite % 60) + ' сек.');
+
+    var ua = navigator.userAgent || '';
+    var isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    var deviceType = isMobile ? 'Смартфон' : 'Десктоп';
+    var screen = window.screen ? (window.screen.width + '×' + window.screen.height) : '';
+
+    var ymUid = '';
+    var ymMatch = document.cookie.match(/_ym_uid=([^;]+)/);
+    if (ymMatch) ymUid = ymMatch[1];
+
+    var result = {
+      landing_page: landingPage,
+      referrer: referrer || 'Прямой заход',
+      device: deviceType + (screen ? ' (' + screen + ')' : ''),
+      time_on_site: timeOnSite,
+      ym_uid: ymUid
+    };
+    Object.keys(storedUtm).forEach(function (k) { result[k] = storedUtm[k]; });
+    return result;
+  }
+
+  try { getAnalyticsData(); } catch (e) {}
+
   function submitLead(e, done) {
     var btn = e.currentTarget;
     var form = btn.form || btn.closest('form');
     if (form && form.reportValidity && !form.reportValidity()) return;
     var data = {};
-    if (form) new FormData(form).forEach(function (v, k) { data[k] = data[k] ? data[k] + ', ' + v : v; });
-    data.page = location.href;
-    if (!LEAD_ENDPOINT) {
-      console.warn('Хвалите Media: LEAD_ENDPOINT не задан (source/runtime.js или этот файл в assets/js/) — заявка никуда не отправлена.', data);
-      done(e);
-      return;
+    if (form) {
+      new FormData(form).forEach(function (v, k) {
+        if (data[k] !== undefined) {
+          if (Array.isArray(data[k])) data[k].push(v);
+          else data[k] = [data[k], v];
+        } else {
+          data[k] = v;
+        }
+      });
     }
+    data.page = location.href;
+    try {
+      var analytics = getAnalyticsData();
+      Object.assign(data, analytics);
+    } catch (e) {}
+    var endpoint = (typeof window !== 'undefined' && window.__LEAD_ENDPOINT__) || LEAD_ENDPOINT || (typeof window !== 'undefined' && window.__BASE_URL__ ? window.__BASE_URL__.replace(/\/$/, '') + '/api/lead' : '/api/lead');
     var label = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'Отправляем…';
-    fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
-      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); btn.disabled = false; btn.textContent = label; goal('lead_form'); done(e); })
-      .catch(function () { btn.disabled = false; btn.textContent = 'Не получилось отправить — нажмите ещё раз'; });
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(function (r) {
+        if (!r.ok) {
+          return r.json().then(function (err) { throw new Error(err.error || ('HTTP ' + r.status)); });
+        }
+        return r.json().catch(function () { return {}; });
+      })
+      .then(function () {
+        btn.disabled = false;
+        btn.textContent = label;
+        goal('lead_form');
+        done(e);
+      })
+      .catch(function (err) {
+        console.error('Submit lead error:', err);
+        btn.disabled = false;
+        btn.textContent = 'Ошибка отправки — повторить';
+      });
   }
 
   Array.prototype.forEach.call(document.querySelectorAll('*'), function (el) {

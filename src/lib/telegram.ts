@@ -1,7 +1,16 @@
 /**
- * Telegram Bot notification helper
+ * Telegram Bot notification helper for Хвалите Media
  * Supports loading credentials from process.env / .env
  */
+
+import dns from 'node:dns';
+
+// Ensure IPv4 is preferred over IPv6 for outbound requests in environments lacking IPv6 routing
+try {
+  dns.setDefaultResultOrder?.('ipv4first');
+} catch {
+  // Ignore in environments where not supported
+}
 
 export function escapeHtml(str: unknown): string {
   if (str === null || str === undefined) return '';
@@ -17,6 +26,30 @@ export interface TelegramSendResult {
   error?: string;
   deliveredCount?: number;
   totalCount?: number;
+}
+
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  maxRetries = 2,
+  timeoutMs = 12000
+): Promise<Response> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      return response;
+    } catch (err: unknown) {
+      lastError = err;
+      if (attempt < maxRetries) {
+        await new Promise((resolve) => setTimeout(resolve, 300 * (attempt + 1)));
+      }
+    }
+  }
+  throw lastError;
 }
 
 export async function sendTelegramMessage(htmlMessage: string): Promise<TelegramSendResult> {
@@ -66,14 +99,18 @@ export async function sendTelegramMessage(htmlMessage: string): Promise<Telegram
     }
 
     try {
-      const response = await fetch(`${apiBase}/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetchWithRetry(
+        `${apiBase}/bot${botToken}/sendMessage`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(10000),
-      });
+        2,
+        12000
+      );
 
       const data = await response.json().catch(() => ({}));
 

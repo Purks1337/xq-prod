@@ -23,7 +23,7 @@ const stages = [
       <p style="margin: 0; max-width: 420px; font-size: 17px; line-height: 1.5">Пройдите карту: жмите на уровни или «Дальше». На каждом этапе — кто за него отвечает и сколько он длится.</p>
     </div>
 
-    <div style="overflow-x: auto; padding: 0 12px 12px 0">
+    <div class="process-map-scroll" style="overflow-x: auto; padding: 0 12px 12px 0">
       <div class="process-map-box" style="position: relative; min-width: 760px; aspect-ratio: 20 / 9; border: 4px solid #1B1B1B; box-shadow: 8px 8px 0 #3358F4; overflow: hidden; background: #7CC66A">
         <img
           src={getAssetUrl('/assets/img/map/map-pixel.png')}
@@ -71,29 +71,29 @@ const stages = [
           <polygon points="12,12 100,64 188,12 136,100 188,188 100,136 12,188 64,100" fill="#FFFFFF" stroke="#1B1B1B" stroke-width="16" stroke-linejoin="round" paint-order="stroke"></polygon>
         </svg>
       </div>
-      <div style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px">
-          <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; color: #B9C6FB">
+      <div class="process-stage-content" style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+        <div class="process-stage-header" style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px">
+          <span class="process-stage-who" style="font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; color: #B9C6FB">
             <span data-b-text="st.who">ПРОДЮСЕР</span>:
           </span>
-          <span style="font-weight: 800; font-size: 22px; color: #FFFFFF">
+          <span class="process-stage-title" style="font-weight: 800; font-size: 22px; color: #FFFFFF">
             <span data-b-text="st.title">Заявка</span>
           </span>
-          <span data-if="st.hasTime" style="display: none">
-            <span style="padding: 3px 8px; background: #3358F4; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.08em">
+          <span class="process-stage-time-wrap" data-if="st.hasTime" style="display: none">
+            <span class="process-stage-time" style="padding: 3px 8px; background: #3358F4; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.08em">
               <span data-b-text="st.time"></span>
             </span>
           </span>
         </div>
-        <p aria-live="polite" style="margin: 0; font-size: 18px; line-height: 1.55; color: #E4E3DE">
+        <p class="process-stage-desc" aria-live="polite" style="margin: 0; font-size: 18px; line-height: 1.55; color: #E4E3DE">
           <span data-b-text="st.text">Оставьте заявку или напишите в Telegram. Созвонимся и разберёмся в задаче.</span>
         </p>
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 8px">
-          <button data-on-click="prev" disabled data-b-disabled="prevDisabled" style="min-height: 44px; padding: 0 18px; border: 2px solid #E4E3DE; background: transparent; color: #E4E3DE; font-family: JetBrains Mono, monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; cursor: default; opacity: 0.4" data-b-style="prevStyle">◀ НАЗАД</button>
-          <button data-on-click="next" style="min-height: 44px; padding: 0 18px; border: 0; background: #E4E3DE; color: #1B1B1B; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; cursor: pointer; box-shadow: 4px 4px 0 #3358F4">
+        <div class="process-stage-actions" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 8px">
+          <button class="process-btn-prev" data-on-click="prev" disabled data-b-disabled="prevDisabled" style="min-height: 44px; padding: 0 18px; border: 2px solid #E4E3DE; background: transparent; color: #E4E3DE; font-family: JetBrains Mono, monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; cursor: default; opacity: 0.4" data-b-style="prevStyle">◀ НАЗАД</button>
+          <button class="process-btn-next" data-on-click="next" style="min-height: 44px; padding: 0 18px; border: 0; background: #E4E3DE; color: #1B1B1B; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; letter-spacing: 0.06em; cursor: pointer; box-shadow: 4px 4px 0 #3358F4">
             <span data-b-text="nextLabel">ДАЛЬШЕ ▶</span>
           </button>
-          <span aria-hidden="true" class="blink" style="margin-left: auto; color: #E4E3DE; font-size: 16px">▼</span>
+          <span aria-hidden="true" class="blink process-stage-blink" style="margin-left: auto; color: #E4E3DE; font-size: 16px">▼</span>
         </div>
       </div>
     </div>

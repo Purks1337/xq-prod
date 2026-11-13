@@ -246,17 +246,96 @@ a{color:#3358F4}a:hover{color:#10142E}
   }
 }
 
-/* 6. Process: уменьшение тени и компактность карточки этапа */
+/* 6. Process: мобильная адаптация, центрирование камеры и фиксированная карточка */
+.process-map-scroll {
+  scroll-behavior: auto !important;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.process-map-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 @media (max-width: 640px) {
+  #process {
+    padding: 56px 0 !important;
+  }
+  .process-map-scroll {
+    overflow-x: hidden !important;
+    padding: 0 0 10px 0 !important;
+  }
   .process-map-box {
     box-shadow: 4px 4px 0 #3358F4 !important;
   }
   .process-stage-card {
+    height: 220px !important;
+    min-height: 220px !important;
+    max-height: 220px !important;
     padding: 16px !important;
+    margin-top: 16px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    overflow: hidden !important;
   }
   .process-stage-icon {
-    width: 60px !important;
-    height: 60px !important;
+    display: none !important;
+  }
+  .process-stage-content {
+    flex: 1 1 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    gap: 8px !important;
+  }
+  .process-stage-header {
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 4px 8px !important;
+  }
+  .process-stage-title {
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+  }
+  .process-stage-desc {
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+  }
+  .process-stage-actions {
+    margin-top: auto !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+  }
+  .process-stage-actions button {
+    touch-action: manipulation !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .process-stage-card {
+    height: 230px !important;
+    min-height: 230px !important;
+    max-height: 230px !important;
+    padding: 14px !important;
+  }
+  .process-stage-title {
+    font-size: 16px !important;
+  }
+  .process-stage-desc {
+    font-size: 13.5px !important;
+    line-height: 1.4 !important;
+  }
+  .process-stage-actions button {
+    padding: 0 12px !important;
+    font-size: 13px !important;
   }
 }
 
