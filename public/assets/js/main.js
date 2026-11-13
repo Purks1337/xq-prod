@@ -38,6 +38,7 @@
     this.track = null;
     this.teamRow = null;
     this.heroEl = null;
+    this.hudEl = null;
     this.heroS = 0;
     this.heroTarget = 0;
     this.heroRaf = 0;
@@ -294,12 +295,19 @@
     if (!mapBox) return;
 
     const maxScroll = scrollEl.scrollWidth - scrollEl.clientWidth;
-    if (maxScroll <= 0) return;
+    if (maxScroll <= 0) {
+      if (this.hudEl) this.hudEl.style.transform = '';
+      return;
+    }
 
     const boxOffsetLeft = mapBox.offsetLeft || 0;
     const heroX = boxOffsetLeft + (p[0] / 40) * mapBox.offsetWidth;
     const targetScroll = heroX - (scrollEl.clientWidth / 2);
-    scrollEl.scrollLeft = Math.max(0, Math.min(maxScroll, Math.round(targetScroll)));
+    const scrollLeft = Math.max(0, Math.min(maxScroll, Math.round(targetScroll)));
+    scrollEl.scrollLeft = scrollLeft;
+    if (this.hudEl) {
+      this.hudEl.style.transform = 'translate3d(' + scrollLeft + 'px, 0, 0)';
+    }
   }
   heroPlace(s) {
     const el = this.heroEl;
@@ -669,7 +677,27 @@
       next: () => { const to = stage >= last ? 0 : stage + 1; self.setState({ stage: to }); self.heroGo(to); },
       setHero: (el) => {
         self.heroEl = el;
-        if (el) requestAnimationFrame(() => self.heroPlace(self.heroS));
+        if (el) {
+          const scrollEl = el.closest('.process-map-scroll') || (el.parentElement ? el.parentElement.parentElement : null);
+          if (scrollEl && !scrollEl._hasHudScroll) {
+            scrollEl._hasHudScroll = true;
+            scrollEl.addEventListener('scroll', () => {
+              if (self.hudEl) {
+                self.hudEl.style.transform = 'translate3d(' + scrollEl.scrollLeft + 'px, 0, 0)';
+              }
+            }, { passive: true });
+          }
+          requestAnimationFrame(() => self.heroPlace(self.heroS));
+        }
+      },
+      setHud: (el) => {
+        self.hudEl = el;
+        if (el && self.heroEl) {
+          const scrollEl = self.heroEl.closest('.process-map-scroll') || (self.heroEl.parentElement ? self.heroEl.parentElement.parentElement : null);
+          if (scrollEl) {
+            el.style.transform = 'translate3d(' + scrollEl.scrollLeft + 'px, 0, 0)';
+          }
+        }
       },
       nextLabel: stage >= last ? 'ЗАНОВО ↺' : 'ДАЛЬШЕ ▶',
       prevDisabled: prevDisabled, prevStyle: prevStyle,

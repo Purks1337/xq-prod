@@ -255,6 +255,20 @@ a{color:#3358F4}a:hover{color:#10142E}
 .process-map-scroll::-webkit-scrollbar {
   display: none;
 }
+.process-map-hud {
+  pointer-events: none;
+  will-change: transform;
+}
+@media (max-width: 480px) {
+  .process-map-hud {
+    font-size: 11px !important;
+    padding: 5px 9px !important;
+    gap: 8px !important;
+    border-width: 2px !important;
+    left: 8px !important;
+    top: 8px !important;
+  }
+}
 
 @media (max-width: 640px) {
   #process {
