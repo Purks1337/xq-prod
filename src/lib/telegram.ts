@@ -28,6 +28,7 @@ export async function sendTelegramMessage(htmlMessage: string): Promise<Telegram
   const botToken = process.env.TELEGRAM_BOT_TOKEN?.trim();
   const chatId = process.env.TELEGRAM_CHAT_ID?.trim();
   const threadId = process.env.TELEGRAM_THREAD_ID?.trim();
+  const apiBase = (process.env.TELEGRAM_API_BASE?.trim() || 'https://api.telegram.org').replace(/\/$/, '');
 
   if (!botToken || !chatId) {
     console.error('[Telegram] Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID in environment');
@@ -52,12 +53,13 @@ export async function sendTelegramMessage(htmlMessage: string): Promise<Telegram
   }
 
   try {
-    const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    const response = await fetch(`${apiBase}/bot${botToken}/sendMessage`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10000),
     });
 
     const data = await response.json().catch(() => ({}));
@@ -70,7 +72,9 @@ export async function sendTelegramMessage(htmlMessage: string): Promise<Telegram
 
     return { ok: true };
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Unknown network error';
+    const errorObj = err as { message?: string; cause?: { message?: string; code?: string } };
+    const causeDetail = errorObj?.cause ? ` (cause: ${errorObj.cause.code || errorObj.cause.message || ''})` : '';
+    const message = (errorObj?.message || 'Unknown network error') + causeDetail;
     console.error('[Telegram Exception]', message);
     return { ok: false, error: message };
   }
