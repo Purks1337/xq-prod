@@ -886,6 +886,7 @@
       .then(function () {
         btn.disabled = false;
         btn.textContent = label;
+        try { if (typeof window.ym === 'function') window.ym(114300247, 'reachGoal', 'lead_form'); } catch (e) {}
         done(e);
       })
       .catch(function (err) {

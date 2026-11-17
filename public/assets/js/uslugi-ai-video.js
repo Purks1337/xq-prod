@@ -18,7 +18,7 @@
   var BASE = (typeof window !== 'undefined' && window.__BASE_URL__) ? window.__BASE_URL__.replace(/\/$/, '') + '/' : '';
   // Номер счётчика Яндекс Метрики (код счётчика вставляется в <head>). 0 — цели не отправляются.
   // Цели: lead_form — заявка отправлена, click_phone — клик по телефону, click_messenger — Telegram/WhatsApp.
-  var METRIKA_ID = 0;
+  var METRIKA_ID = 114300247;
   // =====================
 
   function goal(name) {
